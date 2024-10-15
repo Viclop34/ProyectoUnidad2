@@ -13,7 +13,8 @@ public class Cliente extends Usuarios {
     }
 
     public String mostrarDatosCliente (){
-        String datos = "Id: %s \nNombre: %s \n Curp: %s \n Apellidos: %s \n Contrasena: %s \n";
+        String datos = "Id: %s \nNombre: %s \nCurp: %s \nApellidos: %s \nFecha de Nacimiento: %s \nCurp: %s \n", id, nombre, apellidos, fechaNacimiento, curp;
+        return datos;
     }
     //Getters
     public String getCurp() {
