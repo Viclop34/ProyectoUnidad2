@@ -10,7 +10,6 @@ public class Usuarios {
     String nombre;
     String apellidos;
     LocalDate fechaNacimiento;
-    String dirreccion;
     String contrasena;
     Rol rol;
 
@@ -43,10 +42,6 @@ public class Usuarios {
         return fechaNacimiento;
     }
 
-    public String getDirreccion() {
-        return dirreccion;
-    }
-
     public String getContrasena() {
         return contrasena;
     }
@@ -71,10 +66,6 @@ public class Usuarios {
 
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public void setDirreccion(String dirreccion) {
-        this.dirreccion = dirreccion;
     }
 
     public void setContrasena(String contrasena) {

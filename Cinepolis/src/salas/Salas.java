@@ -10,7 +10,6 @@ import java.util.List;
 public class Salas {
     String idSalas;
     int capacidadAsientos;
-    List<Asientos> listaAsientos = new ArrayList<Asientos>();
     Asientos tipoAsiento;
     LocalDate horaDeFuncion;
     int cantidadAsientosVIP;
@@ -20,7 +19,6 @@ public class Salas {
     public Salas(String id, int capacidadAsientos, ArrayList listaAsientos, Asientos tipoAsiento, LocalDate horaDeFuncion, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
         this.idSalas = id;
         this.capacidadAsientos = capacidadAsientos;
-        this.listaAsientos = listaAsientos;
         this.tipoAsiento = tipoAsiento;
         this.horaDeFuncion = horaDeFuncion;
         this.cantidadAsientosVIP = cantidadAsientosVIP;
@@ -35,10 +33,6 @@ public class Salas {
 
     public int getCapacidadAsientos() {
         return capacidadAsientos;
-    }
-
-    public List<Asientos> getListaAsientos() {
-        return listaAsientos;
     }
 
     public Asientos getTipoAsiento() {
@@ -68,10 +62,6 @@ public class Salas {
 
     public void setCapacidadAsientos(int capacidadAsientos) {
         this.capacidadAsientos = capacidadAsientos;
-    }
-
-    public void setListaAsientos(List<Asientos> listaAsientos) {
-        this.listaAsientos = listaAsientos;
     }
 
     public void setTipoAsiento(Asientos tipoAsiento) {

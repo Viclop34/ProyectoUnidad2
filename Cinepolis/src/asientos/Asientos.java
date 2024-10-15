@@ -11,6 +11,10 @@ public class Asientos {
         this.tipoAsiento = tipoAsiento;
     }
 
+    public void mostrarInfo(){
+        System.out.println("Numero de Asiento: " + numeroAsiesnto + "Tipo Asiento: " + tipoAsiento);
+    }
+
     //Getters
     public String getNumeroAsiesnto() {
         return numeroAsiesnto;
