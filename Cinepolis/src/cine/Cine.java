@@ -2,8 +2,10 @@ package cine;
 
 import asientos.Asientos;
 import resources.Rol;
+import usuarios.admin.Admin;
 import usuarios.cliente.Cliente;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
@@ -59,4 +61,21 @@ public class Cine {
     }
 
     //---------------
+
+    // METODOS RELACIONADOS CON BOLETOS
+    public String generarIdBoleto (Asientos asientos, Cliente cliente) {
+        String asiento = asientos.getNumeroAsiesnto();
+        String idCliente = cliente.getId();
+        int numeroRandom = random.nextInt(1, 3000);
+        String idAsiento = String.format("%s-%s-%d", asiento, idCliente, numeroRandom);
+        return idAsiento;
+    }
+
+    public void imprimirBoleto (String idBoleto, Asientos asientos, Cliente cliente) {
+        LocalDate fechaCumpleanos = cliente.getFechaNacimiento();
+        String asiento = asientos.getNumeroAsiesnto();
+        String nombreCliente = cliente.getNombre();
+        String tipoAsiento = asientos.getTipoAsiento().toString();
+    }
+
 }

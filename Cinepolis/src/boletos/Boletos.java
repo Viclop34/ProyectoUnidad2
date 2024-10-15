@@ -20,6 +20,7 @@ Boolean TieneDescuento;
         TipoAsiento = tipoAsiento;
         TieneDescuento = tieneDescuento;
     }
+
     //Getters
 
     public String getIdBoleto() {
