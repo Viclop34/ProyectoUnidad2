@@ -1,6 +1,7 @@
 package cine;
 
 import asientos.Asientos;
+import boletos.Boletos;
 import resources.Rol;
 import salas.Salas;
 import usuarios.Usuarios;
@@ -14,6 +15,7 @@ import java.util.Random;
 public class Cine {
     public ArrayList<Cliente> listaClientes = new ArrayList<>();
     public ArrayList<Usuarios> listaUsuarios = new ArrayList<>();
+    public ArrayList<Boletos> listaBoletos = new ArrayList<>();
     public String asientos [][] = new String [12][10];
     Random random = new Random();
     LocalDateTime fecha = LocalDateTime.now();
@@ -93,27 +95,28 @@ public class Cine {
         }
     }
 
+    public boolean validarDescuento(Asientos asiento, Cliente cliente) {
+
+    }
     //---------------
 
     // METODOS RELACIONADOS CON BOLETOS
     public String generarIdBoleto (Asientos asientos, Cliente cliente) {
-        String asiento = asientos.getNumeroAsiesnto();
+        String asiento = asientos.getNumeroAsiento();
         String idCliente = cliente.getId();
         int numeroRandom = random.nextInt(1, 3000);
         String idAsiento = String.format("%s-%s-%d", asiento, idCliente, numeroRandom);
         return idAsiento;
     }
 
-    public void imprimirBoleto (String idBoleto, Asientos asientos, Cliente cliente, Salas salas) {
-        double costo = 0;
-        String asiento = asientos.getNumeroAsiesnto();
-        String nombreCliente = cliente.getNombre();
-        String tipoAsiento = asientos.getTipoAsiento().toString();
-        String pelicula = salas.getPelicula();
-        String idSala = salas.getIdSalas();
+    public void registrarBoleto(Boletos boleto) {
+        listaBoletos.add(boleto);
+        // Se debe registrar en una sala
+    }
 
-        if (precioTipoAsiento(asientos)){
-        
+
+    public void imprimirBoleto (String idBoleto, Asientos asientos, Cliente cliente, Salas salas) {
+
     }
 
 }
