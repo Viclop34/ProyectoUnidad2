@@ -1,5 +1,5 @@
 package cine;
-
+import java.util.concurrent.ThreadLocalRandom;
 import asientos.Asientos;
 import resources.Rol;
 import usuarios.cliente.Cliente;
@@ -28,7 +28,7 @@ public class Cine {
     public String generarIdCliente(String nombreCliente, String apellidoCliente) {
         char letraUno = nombreCliente.charAt(0);
         char letraDos = apellidoCliente.charAt(apellidoCliente.length() - 1);
-        int numeroAleatorio = random.nextInt(1, 3000);
+        int numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);
         int diaActual = fecha.getDayOfMonth();
         String idCliente = String.format("C-%c%c-%d%d", letraUno, letraDos, numeroAleatorio, diaActual);
         return idCliente;
