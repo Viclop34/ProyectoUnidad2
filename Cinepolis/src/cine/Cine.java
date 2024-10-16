@@ -99,7 +99,7 @@ public class Cine {
     public String generarIdBoleto (Asientos asientos, Cliente cliente) {
         String asiento = asientos.getNumeroAsiesnto();
         String idCliente = cliente.getId();
-        int numeroRandom = random.nextInt(1, 3000);
+        int numeroRandom = ThreadLocalRandom.current().nextInt(1, 3000);
         String idAsiento = String.format("%s-%s-%d", asiento, idCliente, numeroRandom);
         return idAsiento;
     }
@@ -114,6 +114,60 @@ public class Cine {
 
         if (precioTipoAsiento(asientos)){
         
+            }
     }
 
+    public boolean validacionCurp(String curp) {
+        // Verificar si la longitud es correcta (18 caracteres)
+        if (curp.length() != 18) {
+            System.out.println("La CURP debe tener 18 caracteres.");
+            return false;
+        }
+        // Validar los primeros 4 caracteres (deben ser letras mayúsculas)
+        for (int i = 0; i < 4; i++) {
+            char c = curp.charAt(i);
+            if (!Character.isUpperCase(c)) {
+                System.out.println("Los primeros 4 caracteres deben ser letras mayúsculas.");
+                return false;
+            }
+        }
+        // Validar los siguientes 6 caracteres (deben ser números para la fecha de nacimiento)
+        for (int i = 4; i < 10; i++) {
+            char c = curp.charAt(i);
+            if (!Character.isDigit(c)) {
+                System.out.println("La fecha de nacimiento debe contener solo dígitos.");
+                return false;
+            }
+        }
+        // Validar el carácter de sexo (H o M)
+        char sexo = curp.charAt(10);
+        if (sexo != 'H' && sexo != 'M') {
+            System.out.println("El carácter de sexo debe ser 'H' para hombre o 'M' para mujer.");
+            return false;
+        }
+        // Validar los siguientes 2 caracteres (estado, deben ser letras mayúsculas)
+        for (int i = 11; i < 13; i++) {
+            char c = curp.charAt(i);
+            if (!Character.isUpperCase(c)) {
+                System.out.println("El código de estado debe contener dos letras mayúsculas.");
+                return false;
+            }
+        }
+        // Validar los siguientes 3 caracteres (pueden ser letras o dígitos)
+        for (int i = 13; i < 16; i++) {
+            char c = curp.charAt(i);
+            if (!Character.isUpperCase(c) && !Character.isDigit(c)) {
+                System.out.println("Los caracteres del 13 al 15 deben ser letras mayúsculas o dígitos.");
+                return false;
+            }
+        }
+        // Validar el último carácter (debe ser un dígito)
+        char digitoVerificador = curp.charAt(17);
+        if (!Character.isDigit(digitoVerificador)) {
+            System.out.println("El último carácter debe ser un dígito.");
+            return false;
+        }
+        System.out.println("La CURP es válida.");
+        return true;
+    }
 }
