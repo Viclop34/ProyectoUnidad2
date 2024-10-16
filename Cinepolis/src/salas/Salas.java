@@ -1,6 +1,7 @@
 package salas;
 
 import asientos.Asientos;
+import peliculas.gestionPelicullas.Proyeccion;
 import resources.Rol;
 
 import java.time.LocalDate;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Salas {
+
+    ArrayList<Proyeccion> listaProyecciones= new ArrayList<>();
     String idSalas;
     int capacidadAsientos;
     List<Asientos> listaAsientos = new ArrayList<Asientos>();
@@ -26,12 +29,11 @@ public class Salas {
         this.cantidadAsientosVIP = cantidadAsientosVIP;
         this.cantidadAsientosPremium = cantidadAsientosPremium;
         this.pelicula = pelicula;
+        this.listaProyecciones = new ArrayList<>();
     }
 
     //Getters
-    public String getId() {
-        return idSalas;
-    }
+    public String getIdSalas() {return idSalas;}
 
     public int getCapacidadAsientos() {
         return capacidadAsientos;
@@ -60,6 +62,9 @@ public class Salas {
     public String getPelicula() {
         return pelicula;
     }
+
+    public ArrayList<Proyeccion> getProyecciones() {return listaProyecciones;}
+
 
     //Setters
     public void setId(String id) {
@@ -92,5 +97,14 @@ public class Salas {
 
     public void setPelicula(String pelicula) {
         this.pelicula = pelicula;
+    }
+
+    public String mostrarDatosSalas(){
+        String datosSalas = String.format("ID: %s, Capacidad de asientos: %s, Lista Asientos: %s, Tipo de asiento: %s, Hora de función: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, capacidadAsientos, listaAsientos, tipoAsiento, horaDeFuncion,cantidadAsientosVIP,cantidadAsientosPremium );
+        return datosSalas;
+    }
+
+    public void agregarProyeccion(Proyeccion proyeccion) {
+        listaProyecciones.add(proyeccion);
     }
 }

@@ -1,15 +1,18 @@
 package peliculas;
 
-public class Pelicula {
-    String idPelicula;
-    String titulo;
-    String duracion;
-    String genero;
-    String clasificacion;
-    String sinopsis;
-    String autor;
+import java.time.LocalDate;
 
-    public Pelicula(String id, String titulo, String duracion, String genero, String clasificacion, String sinopsis, String autor) {
+public class Pelicula {
+     String idPelicula;
+     String titulo;
+     String duracion;
+     String genero;
+     String clasificacion;
+     String sinopsis;
+     String autor;
+     LocalDate fechaEstreno;
+
+    public Pelicula(String id, String titulo, String duracion, String genero, String clasificacion, String sinopsis, String autor, LocalDate fechaEstreno) {
         this.idPelicula = id;
         this.titulo = titulo;
         this.duracion = duracion;
@@ -17,10 +20,10 @@ public class Pelicula {
         this.clasificacion = clasificacion;
         this.sinopsis = sinopsis;
         this.autor = autor;
+        this.fechaEstreno = fechaEstreno;
     }
 
-    // Getters
-    public String getId() {
+    public String getidPelicula() {
         return idPelicula;
     }
 
@@ -48,9 +51,16 @@ public class Pelicula {
         return autor;
     }
 
-    // Setters
+    public String getIdPelicula() {
+        return idPelicula;
+    }
 
-    public void setId(String id) {
+    public LocalDate getFechaEstreno() {
+        return fechaEstreno;
+    }
+
+
+    public void setidPelicula(String id) {
         this.idPelicula = id;
     }
 
@@ -76,5 +86,15 @@ public class Pelicula {
 
     public void setAutor(String autor) {
         this.autor = autor;
+    }
+
+
+    public void setFechaEstreno(LocalDate fechaEstreno) {
+        this.fechaEstreno = fechaEstreno;
+    }
+
+    public String mostrarDatosPeliculas(){
+        String datosPelicula = String.format("ID: %s, Titulo: %s, Duración: %s, Genero: %s, Clasificación: %s, Sinopsis: %s, Autor: %s", idPelicula, titulo, duracion, genero, clasificacion, sinopsis, autor);
+        return datosPelicula;
     }
 }
