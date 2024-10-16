@@ -13,7 +13,7 @@ public class Salas {
     ArrayList<Proyeccion> listaProyecciones= new ArrayList<>();
     String idSalas;
     int capacidadAsientos;
-    List<Asientos> listaAsientos = new ArrayList<Asientos>();
+    List<Asientos> listaAsientos = new ArrayList<Asientos>(); // ESTO ES UNA MATRIZ
     Asientos tipoAsiento;
     LocalDate horaDeFuncion;
     int cantidadAsientosVIP;
