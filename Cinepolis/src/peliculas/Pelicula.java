@@ -3,14 +3,14 @@ package peliculas;
 import java.time.LocalDate;
 
 public class Pelicula {
-     String idPelicula;
-     String titulo;
-     String duracion;
-     String genero;
-     String clasificacion;
-     String sinopsis;
-     String autor;
-     LocalDate fechaEstreno;
+    String idPelicula;
+    String titulo;
+    String duracion;
+    String genero;
+    String clasificacion;
+    String sinopsis;
+    String autor;
+    LocalDate fechaEstreno;
 
     public Pelicula(String id, String titulo, String duracion, String genero, String clasificacion, String sinopsis, String autor, LocalDate fechaEstreno) {
         this.idPelicula = id;

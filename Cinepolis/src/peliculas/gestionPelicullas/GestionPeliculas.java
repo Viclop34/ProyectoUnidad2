@@ -89,4 +89,3 @@ public class GestionPeliculas extends Pelicula {
         proximosEstrenos.removeAll(peliculasEstrenadas);
     }
 }
-
