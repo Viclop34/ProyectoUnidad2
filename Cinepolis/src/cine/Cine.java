@@ -2,21 +2,35 @@ package cine;
 import java.util.concurrent.ThreadLocalRandom;
 import asientos.Asientos;
 import resources.Rol;
+import salas.Salas;
+import usuarios.Usuarios;
 import usuarios.cliente.Cliente;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Cine {
     public ArrayList<Cliente> listaClientes = new ArrayList<>();
+    public ArrayList<Usuarios> listaUsuarios = new ArrayList<>();
     public String asientos [][] = new String [12][10];
     Random random = new Random();
     LocalDateTime fecha = LocalDateTime.now();
 
+    public Usuarios validarInicioDeSesion (String idCliente, String contrasena) {
+        for (Usuarios usuario : this.listaUsuarios) {
+            if (usuario.getId().equals(idCliente) && usuario.getContrasena().equals(contrasena)) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+
     //METODOS RELACIONADOS CON CLIENTE
     public void registrarCliente(Cliente cliente) {
         listaClientes.add(cliente);
+        listaUsuarios.add(cliente);
     }
 
     public void listarClientes() {
@@ -33,8 +47,18 @@ public class Cine {
         String idCliente = String.format("C-%c%c-%d%d", letraUno, letraDos, numeroAleatorio, diaActual);
         return idCliente;
 
-        //-----------
     }
+
+    public boolean confirmarMesCumpleanos(Cliente cliente) {
+        int mesCumpleanos = cliente.getFechaNacimiento().getMonthValue();
+        int mesActual = LocalDate.now().getMonthValue();
+
+        if (mesCumpleanos == mesActual) {
+            return true;
+        }
+        return false;
+    }
+    //-----------
 
     //METODOS RELACIONADOS CON ASIENTOS
     public void generarAsientos() {
@@ -58,5 +82,38 @@ public class Cine {
         }
     }
 
+    public boolean precioTipoAsiento(Asientos asiento) {
+        Rol rolValidar = asiento.getTipoAsiento();
+
+        if (rolValidar == Rol.PREMIUM) {
+            return true; // 200 Pesos
+        }
+        else {
+            return false; // 400 Pesos
+        }
+    }
+
     //---------------
+
+    // METODOS RELACIONADOS CON BOLETOS
+    public String generarIdBoleto (Asientos asientos, Cliente cliente) {
+        String asiento = asientos.getNumeroAsiesnto();
+        String idCliente = cliente.getId();
+        int numeroRandom = random.nextInt(1, 3000);
+        String idAsiento = String.format("%s-%s-%d", asiento, idCliente, numeroRandom);
+        return idAsiento;
+    }
+
+    public void imprimirBoleto (String idBoleto, Asientos asientos, Cliente cliente, Salas salas) {
+        double costo = 0;
+        String asiento = asientos.getNumeroAsiesnto();
+        String nombreCliente = cliente.getNombre();
+        String tipoAsiento = asientos.getTipoAsiento().toString();
+        String pelicula = salas.getPelicula();
+        String idSala = salas.getIdSalas();
+
+        if (precioTipoAsiento(asientos)){
+        
+    }
+
 }
