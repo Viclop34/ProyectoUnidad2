@@ -16,7 +16,7 @@ public class Asientos {
     }
 
     //Getters
-    public String getNumeroAsiesnto() {
+    public String getNumeroAsiento() {
         return numeroAsiesnto;
     }
 
