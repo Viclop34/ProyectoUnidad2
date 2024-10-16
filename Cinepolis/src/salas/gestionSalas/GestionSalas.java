@@ -7,6 +7,7 @@ import salas.Salas;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GestionSalas extends Salas {
     public ArrayList<Salas> listaSalas= new ArrayList<>();
@@ -43,5 +44,9 @@ public class GestionSalas extends Salas {
         }
         System.out.println("La sala " + IdSalas + " no existe.");
     }
-
+public String generarIdSalas() {
+    int diaActual = LocalDate.now().getDayOfMonth();
+    int numeroAleatorio = new Random().nextInt(100000 - 50) + 50;
+    return String.format("CO-%d-%d-%d", listaSalas.size() + 1, numeroAleatorio, diaActual);
+}
 }
