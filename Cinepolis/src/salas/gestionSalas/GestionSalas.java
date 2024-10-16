@@ -49,6 +49,4 @@ public String generarIdSalas() {
     int numeroAleatorio = new Random().nextInt(100000 - 50) + 50;
     return String.format("CO-%d-%d-%d", listaSalas.size() + 1, numeroAleatorio, diaActual);
 }
-
-
 }
