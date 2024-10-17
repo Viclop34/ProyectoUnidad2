@@ -2,6 +2,9 @@ package gestionComida;
 
 import resources.TipoComida;
 
+import java.time.LocalDateTime;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Comida {
     //Comida
     int idComida;
@@ -11,6 +14,7 @@ public class Comida {
     String tamanoComida;
     Double precioComida;
     TipoComida tipoComida;
+    LocalDateTime fecha = LocalDateTime.now();
     //constructor
     public Comida(int idComida,
                   String nombreComida,
@@ -76,12 +80,10 @@ public class Comida {
         System.out.println("Tamano: " + getTamanoComida());
         System.out.println("Precio: " + getPrecioComida());
     }
-    public void mostrarComida() {
-        System.out.println("Comida: " + getIdComida());
-        System.out.println("Nombre: " + getNombreComida());
-        System.out.println("Descripcion: " + getDescripcionComida());
-        System.out.println("Categoria: " + getCategoriaComida());
-        System.out.println("Tamano: " + getTamanoComida());
-        System.out.println("Precio $ " + getPrecioComida());
+    public String generarIdComida(String nombreComida) {
+        char letraUno = nombreComida.charAt(0);
+        int numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);
+        int diaActual = fecha.getDayOfMonth();
+        return String.format("C-%c%c-%d%d", letraUno, numeroAleatorio, diaActual);
     }
 }
