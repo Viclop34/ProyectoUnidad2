@@ -56,7 +56,11 @@ public class Cine {
     public boolean confirmarMesCumpleanos(Cliente cliente) {
         int mesCumpleanos = cliente.getFechaNacimiento().getMonthValue();
         int mesActual = LocalDate.now().getMonthValue();
-        return mesCumpleanos == mesActual;
+
+        if (mesCumpleanos == mesActual) {
+            return true;
+        }
+        return false;
     }
 
     // MÉTODOS RELACIONADOS CON ASIENTOS
@@ -81,8 +85,14 @@ public class Cine {
     }
 
     public boolean precioTipoAsiento(Asientos asiento) {
-        CalidadAsiento rolValidar = asiento.getTipoAsiento();
-        return rolValidar == CalidadAsiento.PREMIUM; // 200 Pesos (Premium), 400 Pesos (VIP)
+        CalidadAsiento calidadValidar = asiento.getTipoAsiento();
+
+        if (calidadValidar == CalidadAsiento.PREMIUM) {
+            return true; // 200 Pesos
+        }
+        else {
+            return false; // 400 Pesos
+        }
     }
 
     // MÉTODOS RELACIONADOS CON BOLETOS
