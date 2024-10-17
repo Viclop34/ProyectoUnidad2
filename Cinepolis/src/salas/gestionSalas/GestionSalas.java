@@ -24,7 +24,7 @@ public class GestionSalas extends Salas {
     public void agregarProyeccion(int IdSalas, Pelicula pelicula, String horario) {
         for (Salas salas : listaSalas) {
             if (salas.getIdSalas().equals(IdSalas)) {
-                Proyeccion proyeccion = new Proyeccion(pelicula, horario);
+                Proyeccion proyeccion = new Proyeccion(pelicula, horario,salas);
                 salas.agregarProyeccion(proyeccion);
                 System.out.println("Proyección de '" + pelicula.getTitulo() + "' agregada a la sala " + IdSalas + " a las " + horario + ".");
                 return;
