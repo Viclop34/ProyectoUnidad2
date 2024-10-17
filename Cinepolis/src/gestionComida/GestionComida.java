@@ -1,66 +1,55 @@
 package gestionComida;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class GestionComida {
-    String comida;
-    String comidaExistente;
-    String descComida;
-    Boolean precioComida;
-    //constructor
-    public GestionComida(String comida,
-                         String comidaExistente,
-                         String descComida,
-                         Boolean precioComida) {
-        this.comida = comida;
-        this.comidaExistente = comidaExistente;
-        this.descComida = descComida;
-        this.precioComida = precioComida;
-    }
-    //Getters
-    public String comida() {
-        return comida;
-    }
-    public String comidaExistente() {
-        return comidaExistente;
-    }
-    public String descComida() {
-        return descComida;
-    }
-    public Boolean precioComida() {
-        return precioComida;
+    public ArrayList<Comida> listaComida = new ArrayList<>();
+
+    public void registrarComida(Comida comida) {
+        listaComida.add(comida);
     }
 
-    //getters
-    public String getComida() {
-        return comida;
-    }
-    public String getComidaExistente() {
-        return comidaExistente;
-    }
-    public String getDescComida() {
-        return descComida;
-    }
-    public Boolean getPrecioComida () {
-        return precioComida;
-    }
+    public void modificarComida(String nombreComida) {
+        Scanner sc = new Scanner(System.in);
+        for (Comida comida : listaComida) {
+            if (comida.getNombreComida().equals(nombreComida)) {
+                int opcion = 0;
+                while (opcion != 3) {
+                    System.out.println("Ingrese la opcion deseada: ");
+                    System.out.println("1.Eliminar comida ");
+                    System.out.println("2.Modificar precio ");
+                    System.out.println("3.Salir ");
+                    opcion = sc.nextInt();
+                    switch (opcion) {
+                        case 1:
+                            System.out.println(" Haz elegido la opcion eliminar comida ");
 
-    //setters
-    public void setComida(String comida) {
-        this.comida = comida;
-    }
-    public void setComidaExistente(String comidaExistente) {
-        this.comidaExistente = comidaExistente;
-    }
-    public void setDescComida(String descComida) {
-        this.descComida = descComida;
-    }
-    public void setPrecioComida(Boolean precioComida) {
-        this.precioComida = precioComida;
-    }
+                            for (Comida comida1 : listaComida) {
+                                if (comida1.getNombreComida().equals(nombreComida)) {
+                                    listaComida.remove(comida1);
+                                }
+                            }
+                            System.out.println("La comida ha sido eliminada correctamente ");
+                            break;
+                        case 2:
+                            System.out.println("Haz elegido la opcion modificar precio ");
+                            System.out.println("Ingrese el nuevo precio: ");
+                            Double precio = sc.nextDouble();
+                            for(Comida comida1 : listaComida) {
+                              if (comida1.getNombreComida().equals(nombreComida)) {
+                                  comida1.setPrecioComida(precio);
+                              }
+                            }
+                            System.out.println("La comida ha sido modificada correctamente ");
+                            break;
+                        case 3:
+                            return;
 
-    //metodos
-    public void mostrarComidaExistente() {
-        System.out.println(comidaExistente);
-        System.out.println("La comida existente es: " + comidaExistente);
-    }
+                    }
+                }
+            }
 
+        }
+    }
 }

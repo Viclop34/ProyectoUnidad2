@@ -13,6 +13,7 @@ import usuarios.admin.Admin;
 import usuarios.cliente.Cliente;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Menu {
@@ -133,13 +134,13 @@ public class Menu {
                     // Implementar lógica para comprar boletos
                     break;
                 case 2:
-                    gestionPeliculas.mostrarCartelera();
+                    cine.mostrarCartelera();
                     break;
                 case 3:
                     // Implementar lógica para ver reservas
                     break;
                 case 4:
-                    gestionPeliculas.mostrarProximosEstrenos();// Implementar lógica para ver próximos estrenos
+                    cine.mostrarProximosEstrenos();// Implementar lógica para ver próximos estrenos
                     break;
                 case 5:
                     System.out.println("Volviendo al menú principal...");
@@ -156,12 +157,10 @@ public class Menu {
             System.out.println("\n*BIENVENIDO*");
             System.out.println("1. Registrar película");
             System.out.println("2. Modificar película");
-            System.out.println("3. Listar peliculas"); // ES LO MISMO
-            System.out.println("4. Modificar próximos estrenos");// ES LO MISMO
-            System.out.println("5. Agregar a cartelera"); // SE AGREGA AUTOMATICAMENTE
-            System.out.println("6. Modificar cartelera");
-            System.out.println("7. Agregar comida a menu");
-            System.out.println("8. Modificar menu");
+            System.out.println("3. Listar peliculas");
+            System.out.println("4. Modificar cartelera");
+            System.out.println("5. Agregar comida a menu");
+            System.out.println("6. Modificar menu");
             System.out.println("7. Salir");
 
             System.out.print("\nSeleccione una opción:\n");
@@ -178,7 +177,7 @@ public class Menu {
                     System.out.print("Ingrese el autor de la película: ");
                     String autor = scanner.nextLine();
 
-                    String idPelicula = gestionPeliculas.generarIdPelicula(titulo, autor);
+                    String idPelicula = cine.generarIdPelicula(titulo, autor);
 
                     System.out.print("Ingrese el género de la película: ");
                     String genero = scanner.nextLine();
@@ -201,11 +200,12 @@ public class Menu {
 
                     System.out.println("Ingrese el ano del estreno");
                     int anoEstreno = scanner.nextInt();
+                    validarFecha(diaEstreno, mesEstreno, anoEstreno);
 
                     LocalDate fechaEstreno = LocalDate.of(anoEstreno, mesEstreno, diaEstreno);
                     Pelicula nuevaPelicula = new Pelicula(idPelicula,titulo,duracion,genero,clasificacion, sinopsis, autor, fechaEstreno);
-                    gestionPeliculas.registrarPelicula(nuevaPelicula);
-                    gestionPeliculas.agregarACartelera(nuevaPelicula);
+                    cine.registrarPelicula(nuevaPelicula);
+                    cine.agregarACartelera(nuevaPelicula);
 
                     break;
                 case 2:
@@ -213,21 +213,19 @@ public class Menu {
                     System.out.println("MODIFICAR PELICULAS");
                     System.out.println("Ingrese el nombre de la pelicula que desea modificar:");
                     String nombre = scanner.nextLine();
-                    gestionPeliculas.modificarPelicula(nombre);
+                    cine.modificarPelicula(nombre);
                     break;
                 case 3:
                     //REGISTRAR PROXIMOS ESTRENOS
                     cine.listarPeliculas();
                     break;
                 case 4:
-                    // ESTRENOS
+                    System.out.println("MODIFICAR CARTELERA");
+                    cine.modificarCartelera();
                     break;
                 case 5:
-                    gestionPeliculas.agregarACartelera(pelicula);// Implementar lógica de agregar a cartelera
                     break;
                 case 6:
-                    System.out.println("MODIFICAR CARTELERA");
-                    gestionPeliculas.modificarCartelera();
                     break;
                 case 7:
                     System.out.println("Hasta pronto.");
@@ -235,6 +233,27 @@ public class Menu {
                 default:
                     System.out.println("Opción no válida.");
             }
+        }
+    }
+
+
+    public static boolean validarFecha(int dia, int mes, int ano) {
+        try {
+            LocalDate fechaEstreno = LocalDate.of(ano, mes, dia);
+
+            LocalDate fechaActual = LocalDate.now();
+
+            if (fechaEstreno.isBefore(fechaActual)) {
+                System.out.println("La fecha de estreno no puede ser en el pasado.");
+                return false;
+            }
+
+            System.out.println("Fecha de Estreno válida: " + fechaEstreno);
+            return true;
+
+        } catch (DateTimeParseException | IllegalArgumentException e) {
+            System.out.println("Fecha inválida. Por favor, asegúrese de ingresar un día, mes y año correctos.");
+            return false;
         }
     }
 }
