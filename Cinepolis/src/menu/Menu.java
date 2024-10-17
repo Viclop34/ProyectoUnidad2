@@ -3,9 +3,12 @@ package menu;
 import asientos.Asientos;
 import boletos.Boletos;
 import cine.Cine;
+import gestionComida.Comida;
+import gestionComida.GestionComida;
 import gestionPeliculas.GestionPeliculas;
 import peliculas.Pelicula;
 import resources.Rol;
+import resources.TipoComida;
 import salas.Salas;
 import salas.gestionSalas.GestionSalas;
 import usuarios.Usuarios;
@@ -20,12 +23,13 @@ public class Menu {
     private Scanner scanner = new Scanner(System.in);
     private Cine cine = new Cine();
     private GestionPeliculas gestionPeliculas = new GestionPeliculas();
-    private  Pelicula pelicula;
+    private Pelicula pelicula;
     private GestionSalas gestionSalas;
     private Salas salas;
     private Boletos boletos;
     private Asientos asientos;
-
+    private GestionComida gestionComida;
+    private Comida comida;
 // HESM050818MMNRLRA1
 
     public void login() {
@@ -159,9 +163,12 @@ public class Menu {
             System.out.println("2. Modificar película");
             System.out.println("3. Listar peliculas");
             System.out.println("4. Modificar cartelera");
+            System.out.println("5. Listar Cartelera");
             System.out.println("5. Agregar comida a menu");
-            System.out.println("6. Modificar menu");
-            System.out.println("7. Salir");
+            System.out.println("6. Modificar comida");
+            System.out.println("7. Listar clientes");
+            System.out.println("8. Listar proyecciones");
+            System.out.println("9. Salir");
 
             System.out.print("\nSeleccione una opción:\n");
             opcion = scanner.nextInt();
@@ -216,7 +223,7 @@ public class Menu {
                     cine.modificarPelicula(nombre);
                     break;
                 case 3:
-                    //REGISTRAR PROXIMOS ESTRENOS
+                    System.out.println("HA ELEGIDO LA OPCION LISTAR PELICULAS");
                     cine.listarPeliculas();
                     break;
                 case 4:
@@ -224,8 +231,38 @@ public class Menu {
                     cine.modificarCartelera();
                     break;
                 case 5:
+                    System.out.println("LISTAR CARTELERA");
+
+                    System.out.println("");
+
                     break;
                 case 6:
+                    scanner.nextLine();
+                    System.out.println("AGREGAR COMIDA");
+                    System.out.println("Ingrese el nombre de la nueva comida");
+                    String nombreComida = scanner.nextLine();
+                    System.out.println("Ingrese la descripcion");
+                    String descripcion = scanner.nextLine();
+                    System.out.println("Ingrese la categoría de la comida");
+                    String categoria = scanner.nextLine();
+                    System.out.println("Ingrese el tamaño de la comida");
+                    String tamano = scanner.nextLine();
+                    System.out.println("Ingrese el costo de la comida");
+                    String costo = scanner.nextLine();
+                    System.out.println("Ingrese el tipo de comida (Bebida o Alimento)");
+                    String tipo = scanner.nextLine();
+                    while (tipo != "Bebida" || tipo != "Alimento") {
+                        System.out.println("Ingrese un tipo de comida valido");
+                        System.out.println("Ingrese el tipo de comida (Bebida o Alimento)");
+                        tipo = scanner.nextLine();
+                    }
+                    if (tipo == "Bebida") {
+                        TipoComida BoA = TipoComida.BEBIDA;
+                    } else if (tipo == "Alimento") {
+                        TipoComida BoA = TipoComida.COMIDA;
+
+                    }
+                    gestionComida.registrarComida(nombreComida,descripcion, categoria, tamano, costo, BoA );
                     break;
                 case 7:
                     System.out.println("Hasta pronto.");
