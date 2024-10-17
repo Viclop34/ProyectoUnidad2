@@ -34,7 +34,7 @@ public class Comida {
         this.tamanoComida = tamanoComida;
         this.precioComida = precio;
     }
-    //Getters
+/*    //Getters
     public int getIdComida() {
         return idComida;
     }
@@ -103,5 +103,5 @@ public class Comida {
         int i;
         i = cantidad * precioComida;
         return i;
-    }
+    } */
 }

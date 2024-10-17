@@ -12,7 +12,7 @@ public class Pelicula {
     String autor;
     LocalDate fechaEstreno;
 
-    public Pelicula(String id, String titulo, String duracion, String genero, String clasificacion, String sinopsis, String autor) {
+    public Pelicula(String id, String titulo, String duracion, String genero, String clasificacion, String sinopsis, String autor, LocalDate fechaEstreno) {
         this.idPelicula = id;
         this.titulo = titulo;
         this.duracion = duracion;

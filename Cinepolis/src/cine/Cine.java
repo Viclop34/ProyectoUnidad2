@@ -3,7 +3,6 @@ package cine;
 import asientos.Asientos;
 import peliculas.Pelicula;
 import resources.CalidadAsiento;
-import resources.Rol;
 import salas.Salas;
 import usuarios.Usuarios;
 import usuarios.admin.Admin;
@@ -19,14 +18,14 @@ public class Cine {
     public ArrayList<Cliente> listaClientes = new ArrayList<>();
     public ArrayList<Usuarios> listaUsuarios = new ArrayList<>();
     public ArrayList<Admin> listaAdmin = new ArrayList<>();
-    private ArrayList<Pelicula> carteleraActual = new ArrayList<>();
+    public ArrayList<Pelicula> carteleraActual = new ArrayList<>();
     public String asientos[][] = new String[12][10];
     Random random = new Random();
     LocalDateTime fecha = LocalDateTime.now();
 
-    public Usuarios validarInicioDeSesion(String idCliente, String contrasena) {
+    public Usuarios validarInicioDeSesion(String idUsuario, String contrasena) {
         for (Usuarios usuario : this.listaUsuarios) {
-            if (usuario.getId().equals(idCliente) && usuario.getContrasena().equals(contrasena)) {
+            if (usuario.getId().equals(idUsuario) && usuario.getContrasena().equals(contrasena)) {
                 return usuario;
             }
         }
@@ -41,7 +40,13 @@ public class Cine {
 
     public void listarClientes() {
         for (Cliente cliente : listaClientes) {
-            System.out.println(cliente);
+            System.out.println(cliente.mostrarDatosCliente());
+        }
+    }
+
+    public void listarPeliculas() {
+        for (Pelicula pelicula : ) {
+            System.out.println(pelicula.mostrarDatosPeliculas());
         }
     }
 
@@ -162,8 +167,9 @@ public class Cine {
         this.listaAdmin.add(admin);
         this.listaUsuarios.add(admin);
     }
-    public void Cine(){
-        Admin administrador= new Admin("Admin1","Mariana", "Herrejon",LocalDate.now(),"123");
+    public Cine (){
+        LocalDate fechaDeNacimiento = LocalDate.of(2005,03,22);
+        Admin administrador= new Admin("Admin1","Mariana", "Herrejon",fechaDeNacimiento,"123");
         registrarAdmin(administrador);
         this.listaUsuarios.add(administrador);
         this.listaAdmin.add(administrador);

@@ -25,7 +25,7 @@ public class Menu {
     private Boletos boletos;
     private Asientos asientos;
 
-
+// HESM050818MMNRLRA1
 
     public void login() {
         int intentosMaximos = 5;
@@ -83,7 +83,11 @@ public class Menu {
 
                 System.out.println("Ingresa tu CURP: ");
                 String curpCliente = scanner.nextLine();
+
                 while(!cine.validacionCurp(curpCliente)){
+
+                    System.out.println("Ingresa una CURP válida: ");
+                    curpCliente = scanner.nextLine();
                     cine.validacionCurp(curpCliente);
                 }
 
@@ -152,10 +156,10 @@ public class Menu {
             System.out.println("\n*BIENVENIDO*");
             System.out.println("1. Registrar película");
             System.out.println("2. Modificar película");
-            System.out.println("3. Registrar próximos estrenos");
-            System.out.println("4. Modificar próximos estrenos");
-            System.out.println("5. Agregar a cartelera");
-            System.out.println("6. Eliminar de cartelera");
+            System.out.println("3. Listar peliculas"); // ES LO MISMO
+            System.out.println("4. Modificar próximos estrenos");// ES LO MISMO
+            System.out.println("5. Agregar a cartelera"); // SE AGREGA AUTOMATICAMENTE
+            System.out.println("6. Modificar cartelera");
             System.out.println("7. Agregar comida a menu");
             System.out.println("8. Modificar menu");
             System.out.println("7. Salir");
@@ -165,22 +169,65 @@ public class Menu {
 
             switch (opcion) {
                 case 1:
-                    gestionPeliculas.registrarPelicula();
+                    scanner.nextLine();
+                    System.out.println("** Registrar Nueva Película **");
+
+                    System.out.print("Ingrese el título de la película: ");
+                    String titulo = scanner.nextLine();
+
+                    System.out.print("Ingrese el autor de la película: ");
+                    String autor = scanner.nextLine();
+
+                    String idPelicula = gestionPeliculas.generarIdPelicula(titulo, autor);
+
+                    System.out.print("Ingrese el género de la película: ");
+                    String genero = scanner.nextLine();
+
+                    System.out.println("Ingrese la clasificacion de la pelicula: ");
+                    String clasificacion = scanner.nextLine();
+
+                    System.out.print("Ingrese la duración de la película (en minutos): ");
+                    String duracion = scanner.nextLine();
+                    scanner.nextLine(); // Limpiar el buffer
+
+                    System.out.print("Ingrese la sinopsis de la película: ");
+                    String sinopsis = scanner.nextLine();
+
+                    System.out.println("Ingrese el dia del estreno");
+                    int diaEstreno = scanner.nextInt();
+
+                    System.out.println("Ingrese el mes del estreno");
+                    int mesEstreno = scanner.nextInt();
+
+                    System.out.println("Ingrese el ano del estreno");
+                    int anoEstreno = scanner.nextInt();
+
+                    LocalDate fechaEstreno = LocalDate.of(anoEstreno, mesEstreno, diaEstreno);
+                    Pelicula nuevaPelicula = new Pelicula(idPelicula,titulo,duracion,genero,clasificacion, sinopsis, autor, fechaEstreno);
+                    gestionPeliculas.registrarPelicula(nuevaPelicula);
+                    gestionPeliculas.agregarACartelera(nuevaPelicula);
+
                     break;
                 case 2:
-                    gestionPeliculas.modificarPelicula(pelicula.getTitulo());
+                    scanner.nextLine();
+                    System.out.println("MODIFICAR PELICULAS");
+                    System.out.println("Ingrese el nombre de la pelicula que desea modificar:");
+                    String nombre = scanner.nextLine();
+                    gestionPeliculas.modificarPelicula(nombre);
                     break;
                 case 3:
-                    gestionPeliculas.agregarProximoEstreno(pelicula);// Implementar lógica de registrar próximos estrenos
+                    //REGISTRAR PROXIMOS ESTRENOS
+                    cine.listarPeliculas();
                     break;
                 case 4:
-                    gestionPeliculas.modificarProximoEstreno( gestionPeliculas.listaPeliculas);// Implementar lógica de modificar próximos estrenos
+                    // ESTRENOS
                     break;
                 case 5:
                     gestionPeliculas.agregarACartelera(pelicula);// Implementar lógica de agregar a cartelera
                     break;
                 case 6:
-                    // Implementar lógica de eliminar de cartelera
+                    System.out.println("MODIFICAR CARTELERA");
+                    gestionPeliculas.modificarCartelera();
                     break;
                 case 7:
                     System.out.println("Hasta pronto.");
