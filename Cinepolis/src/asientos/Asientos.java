@@ -1,12 +1,13 @@
 package asientos;
 
+import resources.CalidadAsiento;
 import resources.Rol;
 
 public class Asientos {
     String numeroAsiesnto;
-    Rol tipoAsiento;
+    CalidadAsiento tipoAsiento;
 
-    public Asientos(String numeroAsiesnto, Rol tipoAsiento) {
+    public Asientos(String numeroAsiesnto, CalidadAsiento tipoAsiento) {
         this.numeroAsiesnto = numeroAsiesnto;
         this.tipoAsiento = tipoAsiento;
     }
@@ -20,7 +21,7 @@ public class Asientos {
         return numeroAsiesnto;
     }
 
-    public Rol getTipoAsiento() {
+    public CalidadAsiento getTipoAsiento() {
         return tipoAsiento;
     }
 
@@ -29,7 +30,7 @@ public class Asientos {
         this.numeroAsiesnto = numeroAsiesnto;
     }
 
-    public void setTipoAsiento(Rol tipoAsiento) {
+    public void setTipoAsiento(CalidadAsiento tipoAsiento) {
         this.tipoAsiento = tipoAsiento;
     }
 }

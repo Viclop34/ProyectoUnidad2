@@ -1,6 +1,8 @@
 package cine;
 
 import asientos.Asientos;
+import peliculas.Pelicula;
+import resources.CalidadAsiento;
 import resources.Rol;
 import salas.Salas;
 import usuarios.Usuarios;
@@ -17,6 +19,7 @@ public class Cine {
     public ArrayList<Cliente> listaClientes = new ArrayList<>();
     public ArrayList<Usuarios> listaUsuarios = new ArrayList<>();
     public ArrayList<Admin> listaAdmin = new ArrayList<>();
+    private ArrayList<Pelicula> carteleraActual = new ArrayList<>();
     public String asientos[][] = new String[12][10];
     Random random = new Random();
     LocalDateTime fecha = LocalDateTime.now();
@@ -67,9 +70,9 @@ public class Cine {
 
                 Asientos asiento;
                 if (i >= 0 && i <= 3) {
-                    asiento = new Asientos(numeroAsiento, Rol.VIP);
+                    asiento = new Asientos(numeroAsiento, CalidadAsiento.VIP);
                 } else {
-                    asiento = new Asientos(numeroAsiento, Rol.PREMIUM);
+                    asiento = new Asientos(numeroAsiento, CalidadAsiento.PREMIUM);
                 }
                 // Almacenar el asiento en la matriz
                 this.asientos[i][j] = numeroAsiento;
@@ -78,8 +81,8 @@ public class Cine {
     }
 
     public boolean precioTipoAsiento(Asientos asiento) {
-        Rol rolValidar = asiento.getTipoAsiento();
-        return rolValidar == Rol.PREMIUM; // 200 Pesos (Premium), 400 Pesos (VIP)
+        CalidadAsiento rolValidar = asiento.getTipoAsiento();
+        return rolValidar == CalidadAsiento.PREMIUM; // 200 Pesos (Premium), 400 Pesos (VIP)
     }
 
     // MÉTODOS RELACIONADOS CON BOLETOS
@@ -155,4 +158,12 @@ public class Cine {
         this.listaUsuarios.add(administrador);
         this.listaAdmin.add(administrador);
     }
+    // Mostrar cartelera actual
+    public void mostrarCartelera() {
+        System.out.println("Películas en cartelera:");
+        for (Pelicula pelicula : carteleraActual) {
+            System.out.println(" - " + pelicula.getTitulo() + " (Estrenada el: " + pelicula.getFechaEstreno() + ")");
+        }
+    }
+
 }

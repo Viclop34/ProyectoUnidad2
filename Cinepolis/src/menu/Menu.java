@@ -1,7 +1,13 @@
 package menu;
 
+import asientos.Asientos;
+import boletos.Boletos;
 import cine.Cine;
+import gestionPeliculas.GestionPeliculas;
+import peliculas.Pelicula;
 import resources.Rol;
+import salas.Salas;
+import salas.gestionSalas.GestionSalas;
 import usuarios.Usuarios;
 import usuarios.admin.Admin;
 import usuarios.cliente.Cliente;
@@ -12,6 +18,14 @@ import java.util.Scanner;
 public class Menu {
     private Scanner scanner = new Scanner(System.in);
     private Cine cine = new Cine();
+    private GestionPeliculas gestionPeliculas = new GestionPeliculas();
+    private  Pelicula pelicula;
+    private GestionSalas gestionSalas;
+    private Salas salas;
+    private Boletos boletos;
+    private Asientos asientos;
+
+
 
     public void login() {
         int intentosMaximos = 5;
@@ -69,7 +83,9 @@ public class Menu {
 
                 System.out.println("Ingresa tu CURP: ");
                 String curpCliente = scanner.nextLine();
-                cine.validacionCurp(curpCliente);
+                while(!cine.validacionCurp(curpCliente)){
+                    cine.validacionCurp(curpCliente);
+                }
 
                 System.out.println("Ingresa tu dirección:");
                 String direccionCliente = scanner.nextLine();
@@ -113,13 +129,13 @@ public class Menu {
                     // Implementar lógica para comprar boletos
                     break;
                 case 2:
-                    // Implementar lógica para ver películas de cartelera
+                    gestionPeliculas.mostrarCartelera();
                     break;
                 case 3:
                     // Implementar lógica para ver reservas
                     break;
                 case 4:
-                    // Implementar lógica para ver próximos estrenos
+                    gestionPeliculas.mostrarProximosEstrenos();// Implementar lógica para ver próximos estrenos
                     break;
                 case 5:
                     System.out.println("Volviendo al menú principal...");
@@ -132,7 +148,7 @@ public class Menu {
 
     private void mostrarMenuAdmin(Admin administradorEnSesion) {
         int opcion = 0;
-        while (opcion != 14) {
+        while (opcion != 7) {
             System.out.println("\n*BIENVENIDO*");
             System.out.println("1. Registrar película");
             System.out.println("2. Modificar película");
@@ -140,31 +156,33 @@ public class Menu {
             System.out.println("4. Modificar próximos estrenos");
             System.out.println("5. Agregar a cartelera");
             System.out.println("6. Eliminar de cartelera");
-            System.out.println("14. Salir");
+            System.out.println("7. Agregar comida a menu");
+            System.out.println("8. Modificar menu");
+            System.out.println("7. Salir");
 
             System.out.print("\nSeleccione una opción:\n");
             opcion = scanner.nextInt();
 
             switch (opcion) {
                 case 1:
-                    // Implementar lógica de registrar película
+                    gestionPeliculas.registrarPelicula();
                     break;
                 case 2:
-                    // Implementar lógica de modificar película
+                    gestionPeliculas.modificarPelicula(pelicula.getTitulo());
                     break;
                 case 3:
-                    // Implementar lógica de registrar próximos estrenos
+                    gestionPeliculas.agregarProximoEstreno(pelicula);// Implementar lógica de registrar próximos estrenos
                     break;
                 case 4:
-                    // Implementar lógica de modificar próximos estrenos
+                    gestionPeliculas.modificarProximoEstreno( gestionPeliculas.listaPeliculas);// Implementar lógica de modificar próximos estrenos
                     break;
                 case 5:
-                    // Implementar lógica de agregar a cartelera
+                    gestionPeliculas.agregarACartelera(pelicula);// Implementar lógica de agregar a cartelera
                     break;
                 case 6:
                     // Implementar lógica de eliminar de cartelera
                     break;
-                case 14:
+                case 7:
                     System.out.println("Hasta pronto.");
                     break;
                 default:

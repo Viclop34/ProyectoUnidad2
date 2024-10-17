@@ -24,6 +24,7 @@ Boolean TieneDescuento;
     //Getters
 
     public String getIdBoleto() {
+
         return IdBoleto;
     }
 
