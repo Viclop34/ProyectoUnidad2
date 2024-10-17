@@ -1,4 +1,4 @@
-package peliculas.gestionPelicullas;
+package gestionPeliculas;
 
 import peliculas.Pelicula;
 

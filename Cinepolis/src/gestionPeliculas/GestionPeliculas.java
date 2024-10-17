@@ -1,10 +1,12 @@
-package peliculas.gestionPelicullas;
+package gestionPeliculas;
 
 import peliculas.Pelicula;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GestionPeliculas extends Pelicula {
     Scanner sc = new Scanner(System.in);
@@ -17,7 +19,6 @@ public class GestionPeliculas extends Pelicula {
     }
 
     public void registrarPelicula(Pelicula pelicula) {
-
         this.listaPeliculas.add(pelicula);
         System.out.println("Película agregada exitosamente.");
 
@@ -88,4 +89,13 @@ public class GestionPeliculas extends Pelicula {
         }
         proximosEstrenos.removeAll(peliculasEstrenadas);
     }
+    public String generarIdPelicula(String titulo, String autor) {
+        char letraUno = titulo.charAt(0);
+        char letraDos = autor.charAt(autor.length() - 1);
+        int numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);
+        LocalDate fecha = LocalDate.now();
+        int diaActual = fecha.getDayOfMonth();
+        return String.format("P-%c%c-%d%d", letraUno, letraDos, numeroAleatorio, diaActual);
+    }
+
 }

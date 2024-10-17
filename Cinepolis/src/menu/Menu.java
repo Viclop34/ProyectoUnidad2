@@ -1,6 +1,8 @@
 package menu;
 
 import cine.Cine;
+import gestionPeliculas.GestionPeliculas;
+import peliculas.Pelicula;
 import resources.Rol;
 import usuarios.Usuarios;
 import usuarios.admin.Admin;
@@ -113,7 +115,8 @@ public class Menu {
                     // Implementar lógica para comprar boletos
                     break;
                 case 2:
-                    // Implementar lógica para ver películas de cartelera
+                    
+
                     break;
                 case 3:
                     // Implementar lógica para ver reservas

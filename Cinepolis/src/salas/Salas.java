@@ -1,8 +1,7 @@
 package salas;
 
 import asientos.Asientos;
-import peliculas.gestionPelicullas.Proyeccion;
-import resources.Rol;
+import gestionPeliculas.Proyeccion;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
