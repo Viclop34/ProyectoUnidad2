@@ -45,7 +45,7 @@ public class Cine {
     }
 
     public void listarPeliculas() {
-        for (Pelicula pelicula : ) {
+        for (Pelicula pelicula :  ) {
             System.out.println(pelicula.mostrarDatosPeliculas());
         }
     }
