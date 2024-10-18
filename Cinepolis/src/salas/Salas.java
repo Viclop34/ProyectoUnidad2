@@ -12,17 +12,17 @@ public class Salas {
     ArrayList<Proyeccion> listaProyecciones= new ArrayList<>();
     String idSalas;
     int capacidadAsientos;
-    List<Asientos> listaAsientos = new ArrayList<Asientos>(); // ESTO ES UNA MATRIZ
+    String[][] matrizAsientos; // ESTO ES UNA MATRIZ
     Asientos tipoAsiento;
     LocalDate horaDeFuncion;
     int cantidadAsientosVIP;
     int cantidadAsientosPremium;
     String pelicula;
 
-    public Salas(String id, int capacidadAsientos, ArrayList listaAsientos, Asientos tipoAsiento, LocalDate horaDeFuncion, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
+    public Salas(String id, int capacidadAsientos, String [][] matrizAsientos, Asientos tipoAsiento, LocalDate horaDeFuncion, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
         this.idSalas = id;
         this.capacidadAsientos = capacidadAsientos;
-        this.listaAsientos = listaAsientos;
+        this.matrizAsientos = matrizAsientos;
         this.tipoAsiento = tipoAsiento;
         this.horaDeFuncion = horaDeFuncion;
         this.cantidadAsientosVIP = cantidadAsientosVIP;
@@ -38,8 +38,8 @@ public class Salas {
         return capacidadAsientos;
     }
 
-    public List<Asientos> getListaAsientos() {
-        return listaAsientos;
+    public String[][] getmatrizAsientos() {
+        return matrizAsientos;
     }
 
     public Asientos getTipoAsiento() {
@@ -74,8 +74,8 @@ public class Salas {
         this.capacidadAsientos = capacidadAsientos;
     }
 
-    public void setListaAsientos(List<Asientos> listaAsientos) {
-        this.listaAsientos = listaAsientos;
+    public void setMatrizAsientos(String [][] matrizAsientos) {
+        this.matrizAsientos = matrizAsientos;
     }
 
     public void setTipoAsiento(Asientos tipoAsiento) {
@@ -99,7 +99,7 @@ public class Salas {
     }
 
     public String mostrarDatosSalas(){
-        String datosSalas = String.format("ID: %s, Capacidad de asientos: %s, Lista Asientos: %s, Tipo de asiento: %s, Hora de función: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, capacidadAsientos, listaAsientos, tipoAsiento, horaDeFuncion,cantidadAsientosVIP,cantidadAsientosPremium );
+        String datosSalas = String.format("ID: %s, Capacidad de asientos: %s, MatrizAsientos: %s, Tipo de asiento: %s, Hora de función: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, capacidadAsientos, matrizAsientos, tipoAsiento, horaDeFuncion,cantidadAsientosVIP,cantidadAsientosPremium );
         return datosSalas;
     }
 

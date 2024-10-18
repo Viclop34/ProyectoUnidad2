@@ -27,6 +27,7 @@ public class Cine {
     ArrayList<Pelicula> peliculasEstrenadas = new ArrayList<>();
 
     private GestionPeliculas gestionPeliculas = new GestionPeliculas();
+
     public String asientos[][] = new String[12][10];
     Random random = new Random();
     LocalDateTime fecha = LocalDateTime.now();

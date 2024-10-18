@@ -1,14 +1,17 @@
 package gestionPeliculas;
 
 import peliculas.Pelicula;
+import salas.Salas;
 
 public class Proyeccion {
     private Pelicula pelicula;
     private String horario;
+    private Salas sala;
 
-    public Proyeccion(Pelicula pelicula, String horario) {
+    public Proyeccion(Pelicula pelicula, String horario, Salas salas) {
         this.pelicula = pelicula;
         this.horario = horario;
+        this.sala= salas;
     }
 
     public Pelicula getPelicula() {
@@ -19,11 +22,19 @@ public class Proyeccion {
         return horario;
     }
 
+    public Salas getSala() {
+        return sala;
+    }
+
     public void setPelicula(Pelicula pelicula) {
         this.pelicula = pelicula;
     }
 
     public void setHorario(String horario) {
         this.horario = horario;
+    }
+
+    public void setSala(Salas sala) {
+        this.sala = sala;
     }
 }
