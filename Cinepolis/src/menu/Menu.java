@@ -16,7 +16,7 @@ import usuarios.admin.Admin;
 import usuarios.cliente.Cliente;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class Menu {
@@ -128,25 +128,25 @@ public class Menu {
             System.out.println("** BIENVENID@ A CINEPOLIS **");
             System.out.println("1. Comprar boletos");
             System.out.println("2. Ver películas de cartelera");
-            System.out.println("3. Ver mis reservas");
-            System.out.println("4. Ver próximos estrenos");
-            System.out.println("5. Salir");
+            System.out.println("3. Ver mis reservas");;
+            System.out.println("4. Salir");
             System.out.println("Selecciona una opción");
             opcion = scanner.nextInt();
             scanner.nextLine();
 
             switch (opcion) {
                 case 1:
-                    // Implementar lógica para comprar boletos
+                    System.out.println("COMPRAR BOLETOS");
                     break;
                 case 2:
+                    System.out.println("COMPRAR BOLETOS");
                     cine.mostrarCartelera();
                     break;
                 case 3:
                     // Implementar lógica para ver reservas
                     break;
                 case 4:
-                    cine.mostrarProximosEstrenos(); // Implementar lógica para ver próximos estrenos
+
                     break;
                 case 5:
                     System.out.println("Volviendo al menú principal...");
@@ -200,17 +200,42 @@ public class Menu {
                     System.out.print("Ingrese la sinopsis de la película: ");
                     String sinopsis = scanner.nextLine();
 
-                    System.out.println("Ingrese el día del estreno");
-                    int diaEstreno = scanner.nextInt();
+                    System.out.println("Ingrese el año del estreno");
+                    int anoEstreno = scanner.nextInt();
 
                     System.out.println("Ingrese el mes del estreno");
                     int mesEstreno = scanner.nextInt();
 
-                    System.out.println("Ingrese el año del estreno");
-                    int anoEstreno = scanner.nextInt();
-                    validarFecha(diaEstreno, mesEstreno, anoEstreno);
+                    System.out.println("Ingrese el día del estreno");
+                    int diaEstreno = scanner.nextInt();
 
-                    LocalDate fechaEstreno = LocalDate.of(anoEstreno, mesEstreno, diaEstreno);
+                    System.out.println("Ingrese la hora del estreno");
+                    int horaEstreno= scanner.nextInt();
+
+                    System.out.println("Ingrese la minuto del estreno");
+                    int minutoEstreno = scanner.nextInt();
+
+                    LocalDateTime fechaEstreno = LocalDateTime.of(anoEstreno,mesEstreno,diaEstreno,horaEstreno,minutoEstreno);
+                    while(!cine.validarFechaValida(fechaEstreno)){
+                        scanner.nextLine();
+                        System.out.println("FECHA UBICADA EN EL PASADO");
+
+                        System.out.println("Ingrese el año del estreno");
+                        anoEstreno = scanner.nextInt();
+
+                        System.out.println("Ingrese el mes del estreno");
+                        mesEstreno = scanner.nextInt();
+
+                        System.out.println("Ingrese el día del estreno");
+                        diaEstreno = scanner.nextInt();
+
+                        System.out.println("Ingrese la hora del estreno");
+                        horaEstreno= scanner.nextInt();
+
+                        System.out.println("Ingrese la minuto del estreno");
+                        minutoEstreno = scanner.nextInt();
+                        fechaEstreno = LocalDateTime.of(anoEstreno,mesEstreno,diaEstreno,horaEstreno,minutoEstreno);
+                    }
                     Pelicula nuevaPelicula = new Pelicula(idPelicula, titulo, duracion, genero, clasificacion, sinopsis, autor, fechaEstreno);
                     cine.registrarPelicula(nuevaPelicula);
                     cine.agregarACartelera(nuevaPelicula);
@@ -279,6 +304,7 @@ public class Menu {
                    gestionComida.modificarComida(nombreComida1); // Implementar lógica para modificar comida
                     break;
                 case 8:
+                    System.out.println("LISTAR CLIENTES");
                     cine.listarClientes();// Implementar lógica para listar clientes
                     break;
                 case 9:
@@ -290,13 +316,5 @@ public class Menu {
         }
     }
 
-    private void validarFecha(int dia, int mes, int anio) {
-        try {
-            LocalDate fecha = LocalDate.of(anio, mes, dia);
-        } catch (DateTimeParseException e) {
-            System.out.println("Fecha no válida. Intente nuevamente.");
-            // Podrías implementar un bucle para volver a pedir la fecha si es necesario
-        }
-    }
 }
 

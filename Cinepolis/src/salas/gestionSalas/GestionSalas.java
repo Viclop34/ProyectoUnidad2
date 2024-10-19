@@ -12,7 +12,7 @@ import java.util.Random;
 public class GestionSalas extends Salas {
     public ArrayList<Salas> listaSalas= new ArrayList<>();
 
-    public GestionSalas(String id, int capacidadAsientos, ArrayList Asientos, Asientos tipoAsiento, LocalDate horaDeFuncion, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
+    public GestionSalas(String id, int capacidadAsientos, String [][] Asientos, Asientos tipoAsiento, LocalDate horaDeFuncion, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
         super(id, capacidadAsientos,Asientos, tipoAsiento, horaDeFuncion, cantidadAsientosVIP, cantidadAsientosPremium, pelicula);
     }
     public void registrarSalas(Salas salas) {

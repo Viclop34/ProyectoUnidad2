@@ -22,9 +22,8 @@ public class Cine {
     public ArrayList<Admin> listaAdmin = new ArrayList<>();
     public Scanner scanner = new Scanner(System.in);
     public ArrayList<Pelicula> listaPeliculas = new ArrayList<>();
-    public ArrayList<Pelicula> proximosEstrenos = new ArrayList<>();
     public ArrayList<Pelicula> carteleraActual = new ArrayList<>();
-    ArrayList<Pelicula> peliculasEstrenadas = new ArrayList<>();
+
 
     private GestionPeliculas gestionPeliculas = new GestionPeliculas();
 
@@ -51,6 +50,10 @@ public class Cine {
         for (Cliente cliente : listaClientes) {
             System.out.println(cliente.mostrarDatosCliente());
         }
+    }
+
+    public void listarCartelera() {
+        for (Pelicula pelicula : carteleraActual) {}
     }
 
     public void listarPeliculas() {
@@ -242,101 +245,11 @@ public class Cine {
         System.out.println("Película no encontrada.");
     }
 
-    // Agregar película a próximos estrenos
-    public void agregarProximoEstreno(Pelicula pelicula) {
-        proximosEstrenos.add(pelicula);
-        System.out.println("Película '" + pelicula.getTitulo() + "' agregada a próximos estrenos.");
-    }
 
     // Agregar película a cartelera
     public void agregarACartelera(Pelicula pelicula) {
         carteleraActual.add(pelicula);
         System.out.println("Película '" + pelicula.getTitulo() + "' agregada a cartelera.");
-    }
-
-
-    // Mostrar próximos estrenos
-    public void mostrarProximosEstrenos() {
-        System.out.println("Próximos estrenos:");
-        for (Pelicula pelicula : proximosEstrenos) {
-            System.out.println(" - " + pelicula.getTitulo() + " (Fecha de estreno: " + pelicula.getFechaEstreno() + ")");
-        }
-    }
-
-    // Actualizar cartelera: mover películas de "próximos estrenos" a "cartelera" si ya se estrenaron
-    public void actualizarCartelera() {
-        LocalDate hoy = LocalDate.now();
-
-        for (Pelicula pelicula : proximosEstrenos) {
-            if (pelicula.getFechaEstreno().isBefore(hoy) || pelicula.getFechaEstreno().isEqual(hoy)) {
-                agregarACartelera(pelicula);
-                peliculasEstrenadas.add(pelicula);
-            }
-        }
-        proximosEstrenos.removeAll(peliculasEstrenadas);
-    }
-
-    public void modificarProximoEstreno(ArrayList<Pelicula> listaPeliculas) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Ingrese el ID de la película que desea modificar: ");
-        String idPelicula = scanner.nextLine();
-
-        // Buscar la película por su ID
-        for (Pelicula pelicula : listaPeliculas) {
-            if (pelicula.getIdPelicula().equals(idPelicula)) {
-                System.out.println("Detalles actuales de la película:");
-                System.out.println("Título: " + pelicula.getTitulo());
-                System.out.println("Duración: " + pelicula.getDuracion());
-                System.out.println("Género: " + pelicula.getGenero());
-                System.out.println("Clasificación: " + pelicula.getClasificacion());
-                System.out.println("Sinopsis: " + pelicula.getSinopsis());
-                System.out.println("Autor: " + pelicula.getAutor());
-                System.out.println("Fecha de Estreno: " + pelicula.getFechaEstreno());
-
-
-                // Modificar detalles
-                System.out.print("Ingrese el nuevo título (o presione Enter para mantenerlo): ");
-                String nuevoTitulo = scanner.nextLine();
-                if (!nuevoTitulo.isEmpty()) {
-                    pelicula.setTitulo(nuevoTitulo);
-                }
-
-                System.out.print("Ingrese la nueva duración (o presione Enter para mantenerla): ");
-                String nuevaDuracion = scanner.nextLine();
-                if (!nuevaDuracion.isEmpty()) {
-                    pelicula.setDuracion(nuevaDuracion);
-                }
-
-                System.out.print("Ingrese el nuevo género (o presione Enter para mantenerlo): ");
-                String nuevoGenero = scanner.nextLine();
-                if (!nuevoGenero.isEmpty()) {
-                    pelicula.setGenero(nuevoGenero);
-                }
-
-                System.out.print("Ingrese la nueva clasificación (o presione Enter para mantenerla): ");
-                String nuevaClasificacion = scanner.nextLine();
-                if (!nuevaClasificacion.isEmpty()) {
-                    pelicula.setClasificacion(nuevaClasificacion);
-                }
-
-                System.out.print("Ingrese la nueva sinopsis (o presione Enter para mantenerla): ");
-                String nuevaSinopsis = scanner.nextLine();
-                if (!nuevaSinopsis.isEmpty()) {
-                    pelicula.setSinopsis(nuevaSinopsis);
-                }
-
-                System.out.print("Ingrese el nuevo autor (o presione Enter para mantenerlo): ");
-                String nuevoAutor = scanner.nextLine();
-                if (!nuevoAutor.isEmpty()) {
-                    pelicula.setAutor(nuevoAutor);
-                }
-
-                System.out.println("Detalles de la película actualizados correctamente.");
-                return;
-            }
-        }
-        System.out.println("No se encontró ninguna película con el ID especificado.");
     }
 
     public void modificarCartelera() {
@@ -401,7 +314,9 @@ public class Cine {
                         System.out.print("¿Está seguro de que desea eliminar la película? (s/n): ");
                         String confirmacion = scanner.nextLine();
                         if (confirmacion.equalsIgnoreCase("s")) {
+                            carteleraActual.remove(pelicula);
                             listaPeliculas.remove(pelicula);
+
                             System.out.println("Película eliminada de la cartelera.");
                         } else {
                             System.out.println("Eliminación cancelada.");
@@ -419,6 +334,15 @@ public class Cine {
         }
         System.out.println("No se encontró ninguna película con el ID especificado.");
     }
+
+    public boolean validarFechaValida (LocalDateTime fecha) {
+        LocalDateTime fechaActual = LocalDateTime.now();
+        if (fecha.isBefore(fechaActual)){
+            return false;
+        }
+        return true;
+    }
+
 
 
 }
