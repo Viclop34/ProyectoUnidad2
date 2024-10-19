@@ -1,7 +1,8 @@
 package cine;
 
 import asientos.Asientos;
-import gestionPeliculas.GestionPeliculas;
+import gestionComida.Comida;
+import gestionPeliculas.Proyeccion;
 import peliculas.Pelicula;
 import resources.CalidadAsiento;
 import salas.Salas;
@@ -23,9 +24,11 @@ public class Cine {
     public Scanner scanner = new Scanner(System.in);
     public ArrayList<Pelicula> listaPeliculas = new ArrayList<>();
     public ArrayList<Pelicula> carteleraActual = new ArrayList<>();
+    public ArrayList<Comida> listaComida = new ArrayList<>();
+    ArrayList<Proyeccion> listaProyecciones= new ArrayList<>();
+    public ArrayList<Salas> listaSalas= new ArrayList<>();
 
 
-    public String asientos[][] = new String[12][10];
     Random random = new Random();
     LocalDateTime fecha = LocalDateTime.now();
 
@@ -86,25 +89,7 @@ public class Cine {
     }
 
     // MÉTODOS RELACIONADOS CON ASIENTOS
-    public void generarAsientos() {
-        String filas = "ABCDEFGHIJKL";
 
-        for (int i = 0; i < 12; i++) { // filas
-            for (int j = 0; j < 10; j++) { // columnas
-                char letraUno = filas.charAt(i);
-                String numeroAsiento = letraUno + Integer.toString(j);
-
-                Asientos asiento;
-                if (i >= 0 && i <= 3) {
-                    asiento = new Asientos(numeroAsiento, CalidadAsiento.VIP);
-                } else {
-                    asiento = new Asientos(numeroAsiento, CalidadAsiento.PREMIUM);
-                }
-                // Almacenar el asiento en la matriz
-                this.asientos[i][j] = numeroAsiento;
-            }
-        }
-    }
 
     public boolean precioTipoAsiento(Asientos asiento) {
         CalidadAsiento calidadValidar = asiento.getTipoAsiento();
@@ -227,7 +212,7 @@ public class Cine {
                 pelicula.setTitulo(scanner.nextLine());
 
                 System.out.print("Nueva duración (minutos): ");
-                pelicula.setDuracion(scanner.nextLine());
+                pelicula.setDuracion(scanner.nextInt());
 
                 System.out.print("Nuevo género: ");
                 pelicula.setGenero(scanner.nextLine());
@@ -280,36 +265,39 @@ public class Cine {
         switch (opcion) {
             case 1: // Modificar detalles
                 // Modificar detalles
+                scanner.nextLine();
                 System.out.print("Ingrese el nuevo título (o presione Enter para mantenerlo): ");
                 String nuevoTitulo = scanner.nextLine();
                 if (!nuevoTitulo.isEmpty()) {
                     pelicula.setTitulo(nuevoTitulo);
                 }
-
+                scanner.nextLine();
                 System.out.print("Ingrese la nueva duración (o presione Enter para mantenerla): ");
-                String nuevaDuracion = scanner.nextLine();
-                if (!nuevaDuracion.isEmpty()) {
+                int nuevaDuracion = scanner.nextInt();
                     pelicula.setDuracion(nuevaDuracion);
-                }
 
+                scanner.nextLine();
                 System.out.print("Ingrese el nuevo género (o presione Enter para mantenerlo): ");
                 String nuevoGenero = scanner.nextLine();
                 if (!nuevoGenero.isEmpty()) {
                     pelicula.setGenero(nuevoGenero);
                 }
 
+                scanner.nextLine();
                 System.out.print("Ingrese la nueva clasificación (o presione Enter para mantenerla): ");
                 String nuevaClasificacion = scanner.nextLine();
                 if (!nuevaClasificacion.isEmpty()) {
                     pelicula.setClasificacion(nuevaClasificacion);
                 }
 
+                scanner.nextLine();
                 System.out.print("Ingrese la nueva sinopsis (o presione Enter para mantenerla): ");
                 String nuevaSinopsis = scanner.nextLine();
                 if (!nuevaSinopsis.isEmpty()) {
                     pelicula.setSinopsis(nuevaSinopsis);
                 }
 
+                scanner.nextLine();
                 System.out.print("Ingrese el nuevo autor (o presione Enter para mantenerlo): ");
                 String nuevoAutor = scanner.nextLine();
                 if (!nuevoAutor.isEmpty()) {
@@ -364,7 +352,116 @@ public class Cine {
         return true;
     }
 
+    public void registrarComida(Comida comida) {
+        listaComida.add(comida);
+    }
 
+    public void modificarComida(String nombreComida) {
+        Scanner sc = new Scanner(System.in);
+        Comida comida = null;
+        for (Comida comidaEnLista : listaComida) {
+            if (comidaEnLista.getNombreComida().equals(nombreComida)) {
+                comida = comidaEnLista;
+            }
+        }
+        if (comida == null) {
+            System.out.println("El comida no existe");
+        }
+        int opcion = 0;
+        while (opcion != 3) {
+            System.out.println("Ingrese la opcion deseada: ");
+            System.out.println("1.Eliminar comida ");
+            System.out.println("2.Modificar precio ");
+            System.out.println("3.Salir ");
+            opcion = sc.nextInt();
+            switch (opcion) {
+                case 1:
+                    System.out.println(" Haz elegido la opcion eliminar comida ");
+                    int indexComida = 0;
+                    for (Comida comidaEnLista : listaComida) {
+                        if (comidaEnLista.getNombreComida().equals(nombreComida)) {
+                            listaComida.remove(indexComida);
+                            break;
+                        }
+                        indexComida++;
+                    }
+                    System.out.println("La comida ha sido eliminada correctamente ");
+                    break;
+                case 2:
+                    System.out.println("Haz elegido la opcion modificar precio ");
+                    System.out.println("Ingrese el nuevo precio: ");
+                    Double precio = sc.nextDouble();
+                    for(Comida comida1 : listaComida) {
+                        if (comida1.getNombreComida().equals(nombreComida)) {
+                            comida1.setPrecioComida(precio);
+                        }
+                    }
+                    System.out.println("La comida ha sido modificada correctamente ");
+                    break;
+                case 3:
+                    return;
+            }
+        }
+    }
+
+    public void listarComida(){
+        for (Comida comida: listaComida){
+            System.out.println(comida.mostrarInfoComida());
+        }
+    }
+
+/*    public void agregarProyeccion(Proyeccion proyeccion) {
+        listaProyecciones.add(proyeccion);
+    }
+
+    public void agregarProyeccion(int idSalas, Pelicula pelicula, LocalDate horario) {
+        for (Salas salas : listaSalas) {
+            if (salas.getIdSalas().equals(idSalas)) {
+                Proyeccion proyeccion = new Proyeccion(pelicula, horario,salas);
+                salas.agregarProyeccion(proyeccion);
+                System.out.println("Proyección de '" + pelicula.getTitulo() + "' agregada a la sala " + idSalas + " a las " + horario + ".");
+                return;
+            }
+        }
+        System.out.println("La sala " + idSalas + " no existe.");
+    }
+    public void mostrarProyecciones(int IdSalas) {
+        for (Salas sala : listaSalas) {
+            if (sala.getIdSalas().equals(IdSalas)){
+                System.out.println("Proyecciones en la sala " + IdSalas + ":");
+                for (Proyeccion proyeccion : sala.getProyecciones()) {
+                    System.out.println(" - " + proyeccion.getPelicula().getTitulo() + " a las " + proyeccion.getHorario());
+                }
+                return;
+            }
+        }
+        System.out.println("La sala " + IdSalas + " no existe.");
+    }*/
+    public String generarIdSalas() {
+        int diaActual = LocalDate.now().getDayOfMonth();
+        int numeroAleatorio = new Random().nextInt(100000 - 50) + 50;
+        return String.format("CO-%d-%d-%d", listaSalas.size() + 1, numeroAleatorio, diaActual);
+    }
+    public void registrarSalas(Salas salas) {
+
+        listaSalas.add(salas);
+        System.out.println("Sala agregada exitosamente.");
+
+    }
+    public void listarSalas(){
+        for(Salas sala : listaSalas){
+            System.out.println(sala.mostrarDatosSala());
+        }
+    }
+
+    public boolean validarNombrePelicula(String nombrePelicula) {
+        for(Pelicula pelicula : listaPeliculas) {
+            if(pelicula.getTitulo().equals(nombrePelicula)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
 

@@ -9,26 +9,21 @@ import java.util.List;
 
 public class Salas {
 
-    ArrayList<Proyeccion> listaProyecciones= new ArrayList<>();
     String idSalas;
     int capacidadAsientos;
-    String[][] matrizAsientos; // ESTO ES UNA MATRIZ
-    Asientos tipoAsiento;
+    Asientos[][] matrizAsientos; // ESTO ES UNA MATRIZ
     LocalDate horaDeFuncion;
     int cantidadAsientosVIP;
     int cantidadAsientosPremium;
     String pelicula;
 
-    public Salas(String id, int capacidadAsientos, String [][] matrizAsientos, Asientos tipoAsiento, LocalDate horaDeFuncion, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
+    public Salas(String id, int capacidadAsientos, Asientos [][] matrizAsientos, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
         this.idSalas = id;
         this.capacidadAsientos = capacidadAsientos;
         this.matrizAsientos = matrizAsientos;
-        this.tipoAsiento = tipoAsiento;
-        this.horaDeFuncion = horaDeFuncion;
         this.cantidadAsientosVIP = cantidadAsientosVIP;
         this.cantidadAsientosPremium = cantidadAsientosPremium;
         this.pelicula = pelicula;
-        this.listaProyecciones = new ArrayList<>();
     }
 
     //Getters
@@ -38,12 +33,8 @@ public class Salas {
         return capacidadAsientos;
     }
 
-    public String[][] getmatrizAsientos() {
+    public Asientos[][] getmatrizAsientos() {
         return matrizAsientos;
-    }
-
-    public Asientos getTipoAsiento() {
-        return tipoAsiento;
     }
 
     public LocalDate getHoraDeFuncion() {
@@ -62,8 +53,6 @@ public class Salas {
         return pelicula;
     }
 
-    public ArrayList<Proyeccion> getProyecciones() {return listaProyecciones;}
-
 
     //Setters
     public void setId(String id) {
@@ -74,12 +63,8 @@ public class Salas {
         this.capacidadAsientos = capacidadAsientos;
     }
 
-    public void setMatrizAsientos(String [][] matrizAsientos) {
+    public void setMatrizAsientos(Asientos [][] matrizAsientos) {
         this.matrizAsientos = matrizAsientos;
-    }
-
-    public void setTipoAsiento(Asientos tipoAsiento) {
-        this.tipoAsiento = tipoAsiento;
     }
 
     public void setHoraDeFuncion(LocalDate horaDeFuncion) {
@@ -99,11 +84,8 @@ public class Salas {
     }
 
     public String mostrarDatosSala(){
-        String datosSalas = String.format("ID: %s, Capacidad de asientos: %s, MatrizAsientos: %s, Tipo de asiento: %s, Hora de función: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, capacidadAsientos, matrizAsientos, tipoAsiento, horaDeFuncion,cantidadAsientosVIP,cantidadAsientosPremium );
+        String datosSalas = String.format("ID: %s, Capacidad de asientos: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, capacidadAsientos,cantidadAsientosVIP,cantidadAsientosPremium );
         return datosSalas;
     }
 
-    public void agregarProyeccion(Proyeccion proyeccion) {
-        listaProyecciones.add(proyeccion);
-    }
 }

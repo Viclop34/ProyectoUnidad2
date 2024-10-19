@@ -15,7 +15,7 @@ public class Cliente extends Usuarios {
     }
 
     public String mostrarDatosCliente (){
-        String datos = "Id: %s \nNombre: %s \nApellidos: %s \nFecha de Nacimiento: %s \nCurp: %s \nDireccion: %s", id, nombre, apellidos, fechaNacimiento, curp, direccion;
+        String datos = String.format("Id: %s  Nombre: %s  Apellidos: %s  Fecha de Nacimiento: %s  Curp: %s  Direccion: %s",getNombre(),getApellidos() ,getFechaNacimiento(),curp,direccion);
         return datos;
     }
     //Getters

@@ -74,13 +74,9 @@ public class Comida {
     }
 
     //metodos
-    public void mostrarInfoComida() {
-        System.out.println("Comida: " + getIdComida());
-        System.out.println("Nombre: " + getNombreComida());
-        System.out.println("Descripcion: " + getDescripcionComida());
-        System.out.println("Categoria: " + getCategoriaComida());
-        System.out.println("Tamano: " + getTamanoComida());
-        System.out.println("Precio: " + getPrecioComida());
+    public String mostrarInfoComida() {
+        String datos = String.format("Id: %s Nombre: %s Descripcion: %s, Categoria: %s, Tamano: %s Precio: %d", idComida,nombreComida,descripcionComida,categoriaComida,tamanoComida,precioComida);
+        return datos;
     }
     public String generarIdComida(String nombreComida) {
         char letraUno = nombreComida.charAt(0);

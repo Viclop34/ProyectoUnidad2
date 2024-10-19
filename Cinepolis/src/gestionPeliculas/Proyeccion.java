@@ -3,12 +3,14 @@ package gestionPeliculas;
 import peliculas.Pelicula;
 import salas.Salas;
 
+import java.time.LocalDate;
+
 public class Proyeccion {
     public Pelicula pelicula;
-    public String horario;
+    public LocalDate horario;
     public Salas sala;
 
-    public Proyeccion(Pelicula pelicula, String horario, Salas salas) {
+    public Proyeccion(Pelicula pelicula, LocalDate horario, Salas salas) {
         this.pelicula = pelicula;
         this.horario = horario;
         this.sala= salas;
@@ -18,7 +20,7 @@ public class Proyeccion {
         return pelicula;
     }
 
-    public String getHorario() {
+    public LocalDate getHorario() {
         return horario;
     }
 
@@ -30,7 +32,7 @@ public class Proyeccion {
         this.pelicula = pelicula;
     }
 
-    public void setHorario(String horario) {
+    public void setHorario(LocalDate horario) {
         this.horario = horario;
     }
 

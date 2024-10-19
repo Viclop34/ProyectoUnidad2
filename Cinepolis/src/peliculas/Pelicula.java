@@ -5,14 +5,14 @@ import java.time.LocalDateTime;
 public class Pelicula {
     String idPelicula;
     String titulo;
-    String duracion;
+    int duracion;
     String genero;
     String clasificacion;
     String sinopsis;
     String autor;
     LocalDateTime fechaEstreno;
 
-    public Pelicula(String id, String titulo, String duracion, String genero, String clasificacion, String sinopsis, String autor, LocalDateTime fechaEstreno) {
+    public Pelicula(String id, String titulo, int duracion, String genero, String clasificacion, String sinopsis, String autor, LocalDateTime fechaEstreno) {
         this.idPelicula = id;
         this.titulo = titulo;
         this.duracion = duracion;
@@ -31,7 +31,7 @@ public class Pelicula {
         return titulo;
     }
 
-    public String getDuracion() {
+    public int getDuracion() {
         return duracion;
     }
 
@@ -68,7 +68,7 @@ public class Pelicula {
         this.titulo = titulo;
     }
 
-    public void setDuracion(String duracion) {
+    public void setDuracion(int duracion) {
         this.duracion = duracion;
     }
 

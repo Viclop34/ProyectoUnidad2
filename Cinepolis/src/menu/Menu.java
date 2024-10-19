@@ -5,8 +5,8 @@ import boletos.Boletos;
 import cine.Cine;
 import gestionComida.Comida;
 import gestionComida.GestionComida;
-import gestionPeliculas.GestionPeliculas;
 import peliculas.Pelicula;
+import resources.CalidadAsiento;
 import resources.Rol;
 import resources.TipoComida;
 import salas.Salas;
@@ -14,7 +14,6 @@ import salas.gestionSalas.GestionSalas;
 import usuarios.Usuarios;
 import usuarios.admin.Admin;
 import usuarios.cliente.Cliente;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -42,7 +41,7 @@ public class Menu {
         String cIdPelicula = cine.generarIdPelicula("Locas", "Pablo");
         LocalDateTime cFechaEstreno = LocalDateTime.of(2025,7,20,5,10);
 
-        Pelicula cNuevaPelicula = new Pelicula(cIdPelicula, "Locas", "120", "Accion", "13"
+        Pelicula cNuevaPelicula = new Pelicula(cIdPelicula, "Locas", 120, "Accion", "13"
                 , "fdsuhfksdhfsdjk", "Pablo", cFechaEstreno);
         cine.registrarPelicula(cNuevaPelicula);
         cine.agregarACartelera(cNuevaPelicula);
@@ -166,7 +165,7 @@ public class Menu {
 
     private void mostrarMenuAdmin(Admin administradorEnSesion) {
         int opcion = 0;
-        while (opcion != 9) { // Cambié el límite a 9 para coincidir con las opciones
+        while (opcion != 14) { // Cambié el límite a 9 para coincidir con las opciones
             System.out.println("\n*BIENVENIDO*");
             System.out.println("1. Registrar película");
             System.out.println("2. Modificar película");
@@ -175,8 +174,13 @@ public class Menu {
             System.out.println("5. Listar Cartelera");
             System.out.println("6. Agregar comida a menu");
             System.out.println("7. Modificar comida");
-            System.out.println("8. Listar clientes");
-            System.out.println("9. Salir");
+            System.out.println("8. Listar comida");
+            System.out.println("9. Crear Sala");
+            System.out.println("10. Lisar Sala");
+            System.out.println("11. Crear Proyeccion");
+            System.out.println("12. Listar Proyecciones");
+            System.out.println("13. Listar clientes");
+            System.out.println("14. Salir");
 
             System.out.print("\nSeleccione una opción:\n");
             opcion = scanner.nextInt();
@@ -201,7 +205,7 @@ public class Menu {
                     String clasificacion = scanner.nextLine();
 
                     System.out.print("Ingrese la duración de la película (en minutos): ");
-                    String duracion = scanner.nextLine();
+                    int duracion = scanner.nextInt();
                     scanner.nextLine(); // Limpiar el buffer
 
                     System.out.print("Ingrese la sinopsis de la película: ");
@@ -302,21 +306,74 @@ public class Menu {
                     }
                     Comida comida = new Comida(id, nombreComida,descripcion,categoria,tamano,costo,BoA);
                     // Registrar la comida usando gestionComida
-                    gestionComida.registrarComida(comida);
+                    cine.registrarComida(comida);
                     break;
                 case 7:
+                    scanner.nextLine();
                     System.out.println("MODIFICAR COMIDA");
                     System.out.println("Ingrese el nombre de la comida: ");
                     String nombreComida1 = scanner.nextLine();
-                   gestionComida.modificarComida(nombreComida1); // Implementar lógica para modificar comida
+                   cine.modificarComida(nombreComida1); // Implementar lógica para modificar comida
                     break;
                 case 8:
-                    System.out.println("LISTAR CLIENTES");
-                    cine.listarClientes();// Implementar lógica para listar clientes
+                    System.out.println("LISTAR COMIDA");
+                    cine.listarComida();
                     break;
                 case 9:
-                    System.out.println("Saliendo del menú...");
+                    System.out.println("CREAR SALA");
+                    String idSala = cine.generarIdSalas();
+                    Asientos [][] Asientos = new Asientos[12][10];
+                    String filas = "ABCDEFGHIJKL";
+                    int cantidadDeVip = 0;
+                    int cantidadDePremium = 0;
+
+                    for (int i = 0; i < 12; i++) { // filas
+                        for (int j = 0; j < 10; j++) { // columnas
+                            char letraUno = filas.charAt(i);
+                            String numeroAsiento = letraUno + Integer.toString(j);
+
+                            Asientos asiento;
+                            if (i >= 0 && i <= 3) {
+                                asiento = new Asientos(numeroAsiento, CalidadAsiento.VIP);
+                                cantidadDeVip++;
+                            } else {
+                                asiento = new Asientos(numeroAsiento, CalidadAsiento.PREMIUM);
+                                cantidadDePremium++;
+                            }
+                            // Almacenar el asiento en la matriz
+                            Asientos[i][j] = asiento;
+                        }
+                    }
+                    scanner.nextLine();
+                    System.out.println("Ingrese el nombre de la pelicula: ");
+                    String nombrePeliculaAValidar = scanner.nextLine();
+                    while(!cine.validarNombrePelicula(nombrePeliculaAValidar)){
+                        System.out.println("Nombre no encontrado");
+                        System.out.println("Ingrese el nombre de la pelicula: ");
+                        nombrePeliculaAValidar = scanner.nextLine();
+                    }
+
+                    Salas salas = new Salas(idSala,120,Asientos,cantidadDeVip,cantidadDePremium,nombrePeliculaAValidar);
+                    cine.registrarSalas(salas);
+
                     break;
+
+                    case 10:
+                        System.out.println("LISTAR SALAS");
+                        cine.listarSalas();
+                        break;
+                        case 11:
+                            System.out.println("CREAR PROYECCION");
+                            break;
+                            case 12:
+                                System.out.println("LISTAR PROYECCION");
+                                break;
+                                case 13:
+                                    System.out.println("LISTAR CLIENTES");
+                                    break;
+                                    case 14:
+                                        System.out.println("Saliendo del menu...");
+                                        return;
                 default:
                     System.out.println("Opción no válida. Por favor, elige nuevamente.");
             }
