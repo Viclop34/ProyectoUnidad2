@@ -6,6 +6,7 @@ import resources.Rol;
 public class Asientos {
     String numeroAsiesnto;
     CalidadAsiento tipoAsiento;
+    String status = "Desocupado";
 
     public Asientos(String numeroAsiesnto, CalidadAsiento tipoAsiento) {
         this.numeroAsiesnto = numeroAsiesnto;

@@ -17,6 +17,8 @@ import usuarios.admin.Admin;
 import usuarios.cliente.Cliente;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
@@ -47,6 +49,15 @@ public class Menu {
         cine.registrarPelicula(cNuevaPelicula);
         cine.agregarACartelera(cNuevaPelicula);
     //
+
+        // CLIENTE PRUEBA
+        String cId = cine.generarIdCliente("Victor", "Lopez");
+        LocalDate cFechaNacimiento = LocalDate.of(2000, 4, 1);
+        Cliente cCliente = new Cliente(cId, "Victor", "Lopez", cFechaNacimiento, "cliente", "RACW050729MMCSHNA2", "kfdsjflksjf");
+        cCliente.setId("vic123");
+        cine.registrarCliente(cCliente);
+        //
+        //
         while (intentosUsuario < intentosMaximos) {
             scanner.nextLine();
             System.out.println("\nBienvenido\n");
@@ -67,7 +78,7 @@ public class Menu {
                     if (usuarioEnSesion.getRol() == Rol.CLIENTE) {
                         Cliente clienteEnSesion = (Cliente) usuarioEnSesion;
                         this.mostrarMenuCliente(clienteEnSesion);
-                        return;
+                        intentosUsuario = 0;
                     } else {
                         Admin administradorEnSesion = (Admin) usuarioEnSesion;
                         this.mostrarMenuAdmin(administradorEnSesion);
@@ -136,8 +147,8 @@ public class Menu {
             System.out.println("** BIENVENID@ A CINEPOLIS **");
             System.out.println("1. Comprar boletos");
             System.out.println("2. Ver películas de cartelera");
-            System.out.println("3. Ver mis reservas");;
-            System.out.println("4. Salir");
+            System.out.println("3. Ver mis reservas");
+            System.out.println("5. Salir");
             System.out.println("Selecciona una opción");
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -145,9 +156,59 @@ public class Menu {
             switch (opcion) {
                 case 1:
                     System.out.println("COMPRAR BOLETOS");
+                    System.out.println("Ingrese el nombre de la pelicula deseada");
+                    String nombrePeliculaDeseada = scanner.nextLine();
+                    ArrayList<Proyeccion> proyeccionesPorPelicula = cine.obtenerProyeccionesPorPelicula(nombrePeliculaDeseada);
+
+                    ArrayList<Salas> salasPorProyeccion = new ArrayList<>();;
+                    for (Proyeccion p : proyeccionesPorPelicula) {
+                        boolean valido = true;
+                        Salas salas1 = p.getSala();
+
+                        for (Salas sala : salasPorProyeccion) {
+                            if (sala.getIdSalas().equals(salas1.getIdSalas())) {
+                                valido = false;
+                                break;
+                            }
+                        }
+
+                        if (valido) {
+                            salasPorProyeccion.add(salas1);
+                        }
+                    }
+                    System.out.println("Salas disponibles");
+                    if (salasPorProyeccion != null) {
+                        for (Salas sala : salasPorProyeccion) {
+                            System.out.println(sala.mostrarDatosSala());
+
+                        }
+                    }
+                    System.out.println("Ingrese el numero de sala");
+                    int sala = scanner.nextInt();
+                    cine.obtenerSalaPorNumero(sala);
+                    Salas salas2 = cine.obtenerSalaPorNumero(sala);
+
+                    ArrayList<String> HorariosPorProyeccion = new ArrayList<>();;
+                    for (Proyeccion p : proyeccionesPorPelicula) {
+                        if (p.getSala().getIdSalas().equals(salas2.getIdSalas())) {
+                            HorariosPorProyeccion.add(p.getHorario().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                        }
+                    }
+                    System.out.println("Horarios disponibles");
+                    if (HorariosPorProyeccion != null) {
+                        for (String horario : HorariosPorProyeccion) {
+                            System.out.println(horario);
+                        }
+                    }
+                    scanner.nextLine();
+                    System.out.println("Ingrese el horario deseado");
+                    String horario = scanner.nextLine();
+                    System.out.println("Ingresa el asiento deseado");
+                    System.out.println(salas2.mostrarAsientos());
+
                     break;
                 case 2:
-                    System.out.println("COMPRAR BOLETOS");
+                    System.out.println("VER PELICULAS DE CARTELERA");
                     cine.mostrarCartelera();
                     break;
                 case 3:
@@ -356,7 +417,7 @@ public class Menu {
                         nombrePeliculaAValidar = scanner.nextLine();
                     }
 
-                    Salas salas = new Salas(idSala,120,Asientos,cantidadDeVip,cantidadDePremium,nombrePeliculaAValidar);
+                    Salas salas = new Salas(idSala,cine.listaSalas.size() + 1,120,Asientos,cantidadDeVip,cantidadDePremium,nombrePeliculaAValidar);
                     cine.registrarSalas(salas);
 
                     break;
@@ -377,6 +438,7 @@ public class Menu {
                                 System.out.println("Sala no encontrada");
                                 System.out.println("Ingrese el id de la sala: ");
                                 idSala1 = scanner.nextLine();
+                                salas1 = cine.obtenerSala(idSala1);
                             }
 
                             Pelicula pelicula1 = cine.obtenerPelicula(idSala1);
@@ -421,6 +483,7 @@ public class Menu {
                                 case 13:
 
                                     System.out.println("LISTAR CLIENTES");
+                                    cine.listarClientes();
                                     break;
                                     case 14:
                                         System.out.println("Saliendo del menu...");

@@ -456,8 +456,10 @@ public class Cine {
     }
 
     public Pelicula obtenerPelicula(String idSala) {
+        Salas sala = obtenerSala(idSala);
+
         for (Pelicula pelicula : listaPeliculas) {
-            if(pelicula.getTitulo().equals(idSala)) {
+            if(pelicula.getTitulo().equals(sala.getPelicula())) {
                 return pelicula;
             }
         }
@@ -472,6 +474,26 @@ public class Cine {
         }
         return null;
     }
+
+    public Salas obtenerSalaPorNumero(int sala) {
+        for (Salas salas : listaSalas) {
+            if(salas.getNumeroSala() == sala) {
+                return salas;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Proyeccion> obtenerProyeccionesPorPelicula(String nombrePelicula) {
+        ArrayList<Proyeccion> listaDeProyecciones = new ArrayList<>();
+        for (Proyeccion proyeccion : listaProyecciones) {
+            if(proyeccion.getPelicula().getTitulo().equals(nombrePelicula)) {
+                listaDeProyecciones.add(proyeccion);
+            }
+        }
+        return listaDeProyecciones;
+    }
+
 
 }
 

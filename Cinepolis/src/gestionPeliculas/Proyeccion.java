@@ -42,7 +42,8 @@ public class Proyeccion {
     }
 
     public String mostrarDatos(){
-        String datos= String.format("Id de la sala donde se proyecta: %s, Hora de proyección: %s Nombre de la pelicula: %s", sala.getIdSalas(),horario, pelicula.getTitulo());
+        String datos= String.format("Id de la sala donde se proyecta: %s, Hora de proyección: %s Nombre de la pelicula: %s"
+                , sala.getIdSalas(),horario, pelicula.getTitulo());
         return datos;
     }
 }

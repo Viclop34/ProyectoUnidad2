@@ -10,6 +10,7 @@ import java.util.List;
 public class Salas {
 
     String idSalas;
+    int numeroSala;
     int capacidadAsientos;
     Asientos[][] matrizAsientos; // ESTO ES UNA MATRIZ
     LocalDate horaDeFuncion;
@@ -18,18 +19,23 @@ public class Salas {
     String pelicula;
 
 
-    public Salas(String id, int capacidadAsientos, Asientos [][] matrizAsientos, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
+    public Salas(String id,int numeroSala, int capacidadAsientos, Asientos [][] matrizAsientos, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
         this.idSalas = id;
         this.capacidadAsientos = capacidadAsientos;
         this.matrizAsientos = matrizAsientos;
         this.cantidadAsientosVIP = cantidadAsientosVIP;
         this.cantidadAsientosPremium = cantidadAsientosPremium;
         this.pelicula = pelicula;
+        this.numeroSala = numeroSala;
 
     }
 
     //Getters
     public String getIdSalas() {return idSalas;}
+
+    public int getNumeroSala() {
+        return numeroSala;
+    }
 
     public int getCapacidadAsientos() {
         return capacidadAsientos;
@@ -91,8 +97,19 @@ public class Salas {
     }
 
     public String mostrarDatosSala(){
-        String datosSalas = String.format("ID: %s, Capacidad de asientos: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, capacidadAsientos,cantidadAsientosVIP,cantidadAsientosPremium );
+        String datosSalas = String.format("ID: %s  Numero de sala: %d, Capacidad de asientos: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, numeroSala, capacidadAsientos,cantidadAsientosVIP,cantidadAsientosPremium );
         return datosSalas;
     }
 
+    public String mostrarAsientos(){
+        String vistaAsientos = "";
+        String filas = "ABCDEFGHIJKL";
+        for (int i = 0; i < matrizAsientos.length; i++) {
+            vistaAsientos += String.format("Fila %s \n",filas.charAt(i));
+            for (int j = 0; j < matrizAsientos[i].length; j++) {
+
+            }
+        }
+        return vistaAsientos;
+    }
 }
