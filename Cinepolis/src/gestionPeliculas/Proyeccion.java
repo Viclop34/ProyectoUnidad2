@@ -4,9 +4,9 @@ import peliculas.Pelicula;
 import salas.Salas;
 
 public class Proyeccion {
-    private Pelicula pelicula;
-    private String horario;
-    private Salas sala;
+    public Pelicula pelicula;
+    public String horario;
+    public Salas sala;
 
     public Proyeccion(Pelicula pelicula, String horario, Salas salas) {
         this.pelicula = pelicula;

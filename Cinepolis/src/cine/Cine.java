@@ -25,8 +25,6 @@ public class Cine {
     public ArrayList<Pelicula> carteleraActual = new ArrayList<>();
 
 
-    private GestionPeliculas gestionPeliculas = new GestionPeliculas();
-
     public String asientos[][] = new String[12][10];
     Random random = new Random();
     LocalDateTime fecha = LocalDateTime.now();
@@ -53,7 +51,9 @@ public class Cine {
     }
 
     public void listarCartelera() {
-        for (Pelicula pelicula : carteleraActual) {}
+        for (Pelicula pelicula : carteleraActual) {
+            System.out.println(pelicula.mostrarDatosPeliculas());
+        }
     }
 
     public void listarPeliculas() {
@@ -253,86 +253,107 @@ public class Cine {
     }
 
     public void modificarCartelera() {
-
-
         System.out.print("Ingrese el ID de la película que desea modificar o eliminar: ");
         String idPelicula = scanner.nextLine();
+        Pelicula pelicula = null;
 
         // Buscar la película por su ID
-        for (Pelicula pelicula : listaPeliculas) {
-            if (pelicula.getIdPelicula().equals(idPelicula)) {System.out.println("\n¿Qué desea hacer con esta película?");
-                System.out.println("1. Modificar detalles");
-                System.out.println("2. Eliminar película");
-                System.out.println("3. Cancelar");
-                System.out.print("Seleccione una opción: ");
-                int opcion = scanner.nextInt();
-                scanner.nextLine();  // Limpiar el buffer
-
-                switch (opcion) {
-                    case 1: // Modificar detalles
-                        // Modificar detalles
-                        System.out.print("Ingrese el nuevo título (o presione Enter para mantenerlo): ");
-                        String nuevoTitulo = scanner.nextLine();
-                        if (!nuevoTitulo.isEmpty()) {
-                            pelicula.setTitulo(nuevoTitulo);
-                        }
-
-                        System.out.print("Ingrese la nueva duración (o presione Enter para mantenerla): ");
-                        String nuevaDuracion = scanner.nextLine();
-                        if (!nuevaDuracion.isEmpty()) {
-                            pelicula.setDuracion(nuevaDuracion);
-                        }
-
-                        System.out.print("Ingrese el nuevo género (o presione Enter para mantenerlo): ");
-                        String nuevoGenero = scanner.nextLine();
-                        if (!nuevoGenero.isEmpty()) {
-                            pelicula.setGenero(nuevoGenero);
-                        }
-
-                        System.out.print("Ingrese la nueva clasificación (o presione Enter para mantenerla): ");
-                        String nuevaClasificacion = scanner.nextLine();
-                        if (!nuevaClasificacion.isEmpty()) {
-                            pelicula.setClasificacion(nuevaClasificacion);
-                        }
-
-                        System.out.print("Ingrese la nueva sinopsis (o presione Enter para mantenerla): ");
-                        String nuevaSinopsis = scanner.nextLine();
-                        if (!nuevaSinopsis.isEmpty()) {
-                            pelicula.setSinopsis(nuevaSinopsis);
-                        }
-
-                        System.out.print("Ingrese el nuevo autor (o presione Enter para mantenerlo): ");
-                        String nuevoAutor = scanner.nextLine();
-                        if (!nuevoAutor.isEmpty()) {
-                            pelicula.setAutor(nuevoAutor);
-                        }
-
-                        System.out.println("Detalles de la película actualizados correctamente.");
-                        break;
-
-                    case 2: // Eliminar película
-                        System.out.print("¿Está seguro de que desea eliminar la película? (s/n): ");
-                        String confirmacion = scanner.nextLine();
-                        if (confirmacion.equalsIgnoreCase("s")) {
-                            carteleraActual.remove(pelicula);
-                            listaPeliculas.remove(pelicula);
-
-                            System.out.println("Película eliminada de la cartelera.");
-                        } else {
-                            System.out.println("Eliminación cancelada.");
-                        }
-                        break;
-
-                    case 3: // Cancelar
-                        System.out.println("Operación cancelada.");
-                        return;
-
-                    default:
-                        System.out.println("Opción no válida. Operación cancelada.");
-                }
+        for (Pelicula peliculaEnLista : listaPeliculas) {
+            if (peliculaEnLista.getIdPelicula().equals(idPelicula)) {
+                pelicula = peliculaEnLista;
             }
         }
-        System.out.println("No se encontró ninguna película con el ID especificado.");
+
+        if (pelicula == null) {
+            System.out.println("No se encontró ninguna película con el ID especificado.");
+            return;
+        }
+
+        System.out.println("\n¿Qué desea hacer con esta película?");
+        System.out.println("1. Modificar detalles");
+        System.out.println("2. Eliminar película");
+        System.out.println("3. Cancelar");
+        System.out.print("Seleccione una opción: ");
+        int opcion = scanner.nextInt();
+        scanner.nextLine();  // Limpiar el buffer
+
+        switch (opcion) {
+            case 1: // Modificar detalles
+                // Modificar detalles
+                System.out.print("Ingrese el nuevo título (o presione Enter para mantenerlo): ");
+                String nuevoTitulo = scanner.nextLine();
+                if (!nuevoTitulo.isEmpty()) {
+                    pelicula.setTitulo(nuevoTitulo);
+                }
+
+                System.out.print("Ingrese la nueva duración (o presione Enter para mantenerla): ");
+                String nuevaDuracion = scanner.nextLine();
+                if (!nuevaDuracion.isEmpty()) {
+                    pelicula.setDuracion(nuevaDuracion);
+                }
+
+                System.out.print("Ingrese el nuevo género (o presione Enter para mantenerlo): ");
+                String nuevoGenero = scanner.nextLine();
+                if (!nuevoGenero.isEmpty()) {
+                    pelicula.setGenero(nuevoGenero);
+                }
+
+                System.out.print("Ingrese la nueva clasificación (o presione Enter para mantenerla): ");
+                String nuevaClasificacion = scanner.nextLine();
+                if (!nuevaClasificacion.isEmpty()) {
+                    pelicula.setClasificacion(nuevaClasificacion);
+                }
+
+                System.out.print("Ingrese la nueva sinopsis (o presione Enter para mantenerla): ");
+                String nuevaSinopsis = scanner.nextLine();
+                if (!nuevaSinopsis.isEmpty()) {
+                    pelicula.setSinopsis(nuevaSinopsis);
+                }
+
+                System.out.print("Ingrese el nuevo autor (o presione Enter para mantenerlo): ");
+                String nuevoAutor = scanner.nextLine();
+                if (!nuevoAutor.isEmpty()) {
+                    pelicula.setAutor(nuevoAutor);
+                }
+
+                System.out.println("Detalles de la película actualizados correctamente.");
+                break;
+
+            case 2: // Eliminar película
+                System.out.print("¿Está seguro de que desea eliminar la película? (s/n): ");
+                String confirmacion = scanner.nextLine();
+                if (confirmacion.equalsIgnoreCase("s")) {
+                    int indexPelicula = 0;
+                    for (Pelicula peliculaEnCartelera : carteleraActual) {
+                        if (peliculaEnCartelera.getIdPelicula().equals(idPelicula)){
+                            carteleraActual.remove(indexPelicula);
+                            break;
+                        }
+                        indexPelicula++;
+                    }
+                    indexPelicula = 0;
+                    for (Pelicula peliculaEnLista : listaPeliculas) {
+                        if (peliculaEnLista.getIdPelicula().equals(idPelicula)){
+                            listaPeliculas.remove(indexPelicula);
+                            break;
+                        }
+                        indexPelicula++;
+                    }
+
+
+                    System.out.println("Película eliminada de la cartelera.");
+                } else {
+                    System.out.println("Eliminación cancelada.");
+                }
+                break;
+
+            case 3: // Cancelar
+                System.out.println("Operación cancelada.");
+                return;
+
+            default:
+                System.out.println("Opción no válida. Operación cancelada.");
+        }
     }
 
     public boolean validarFechaValida (LocalDateTime fecha) {

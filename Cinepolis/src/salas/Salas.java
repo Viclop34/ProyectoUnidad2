@@ -98,7 +98,7 @@ public class Salas {
         this.pelicula = pelicula;
     }
 
-    public String mostrarDatosSalas(){
+    public String mostrarDatosSala(){
         String datosSalas = String.format("ID: %s, Capacidad de asientos: %s, MatrizAsientos: %s, Tipo de asiento: %s, Hora de función: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, capacidadAsientos, matrizAsientos, tipoAsiento, horaDeFuncion,cantidadAsientosVIP,cantidadAsientosPremium );
         return datosSalas;
     }

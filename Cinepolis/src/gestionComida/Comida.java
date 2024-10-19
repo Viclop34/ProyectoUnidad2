@@ -30,6 +30,8 @@ public class Comida {
         this.precioComida = precio;
         this.tipoComida = tipoComida;
     }
+    public Comida() {
+    }
    //Getters
     public String getIdComida() {
         return idComida;
@@ -84,6 +86,6 @@ public class Comida {
         char letraUno = nombreComida.charAt(0);
         int numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);
         int diaActual = fecha.getDayOfMonth();
-        return String.format("C-%c%c-%d%d", letraUno, numeroAleatorio, diaActual);
+        return String.format("C-%c%d-%d", letraUno, numeroAleatorio, diaActual);
     }
 }

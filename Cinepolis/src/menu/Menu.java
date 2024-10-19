@@ -22,14 +22,13 @@ import java.util.Scanner;
 public class Menu {
     private Scanner scanner = new Scanner(System.in);
     private Cine cine = new Cine();
-    private GestionPeliculas gestionPeliculas = new GestionPeliculas();
     private Pelicula pelicula;
     private GestionSalas gestionSalas;
     private Salas salas;
     private Boletos boletos;
     private Asientos asientos;
     private GestionComida gestionComida; // Asegúrate de inicializar esta variable
-    private Comida comida;
+    private Comida comida = new Comida();
 
     // Constructor de la clase Menu
     public Menu() {
@@ -39,7 +38,15 @@ public class Menu {
     public void login() {
         int intentosMaximos = 5;
         int intentosUsuario = 0;
+    // PELICULA PRUEBA
+        String cIdPelicula = cine.generarIdPelicula("Locas", "Pablo");
+        LocalDateTime cFechaEstreno = LocalDateTime.of(2025,7,20,5,10);
 
+        Pelicula cNuevaPelicula = new Pelicula(cIdPelicula, "Locas", "120", "Accion", "13"
+                , "fdsuhfksdhfsdjk", "Pablo", cFechaEstreno);
+        cine.registrarPelicula(cNuevaPelicula);
+        cine.agregarACartelera(cNuevaPelicula);
+    //
         while (intentosUsuario < intentosMaximos) {
             System.out.println("\nBienvenido\n");
             System.out.println("¿Ya cuentas con cuenta cinepolis? Si/No");
@@ -258,7 +265,7 @@ public class Menu {
                     break;
                 case 5:
                     System.out.println("LISTAR CARTELERA");
-                    cine.listarPeliculas();
+                    cine.listarCartelera();
                     break;
                 case 6:
                     System.out.println("AGREGAR COMIDA");
@@ -293,9 +300,9 @@ public class Menu {
                             System.out.println("Ingrese un tipo de comida valido (Bebida o Alimento)");
                         }
                     }
-                    Comida comida2 = new Comida(id, nombreComida,descripcion,categoria,tamano,costo,BoA);
+                    Comida comida = new Comida(id, nombreComida,descripcion,categoria,tamano,costo,BoA);
                     // Registrar la comida usando gestionComida
-                    gestionComida.registrarComida(comida2);
+                    gestionComida.registrarComida(comida);
                     break;
                 case 7:
                     System.out.println("MODIFICAR COMIDA");

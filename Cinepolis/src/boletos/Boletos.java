@@ -1,31 +1,36 @@
 package boletos;
 
+import gestionPeliculas.Proyeccion;
+import peliculas.Pelicula;
+import salas.Salas;
+import usuarios.cliente.Cliente;
+
 public class Boletos {
-String IdBoleto;
+String idBoleto;
 String sala;
-String Asiento;
-String Cliente;
-String Pelicula;
-String Precio;
-String TipoAsiento;
-Boolean TieneDescuento;
+String asiento;
+String cliente;
+String pelicula;
+String precio;
+String tipoAsiento;
+Boolean tieneDescuento;
 
     public Boletos(String idBoleto, String sala, String asiento, String cliente, String pelicula, String precio, String tipoAsiento, Boolean tieneDescuento) {
-        IdBoleto = idBoleto;
+        this.idBoleto = idBoleto;
         this.sala = sala;
-        Asiento = asiento;
-        Cliente = cliente;
-        Pelicula = pelicula;
-        Precio = precio;
-        TipoAsiento = tipoAsiento;
-        TieneDescuento = tieneDescuento;
+        this.asiento = asiento;
+        this.cliente = cliente;
+        this.pelicula = pelicula;
+        this.precio = precio;
+        this.tipoAsiento = tipoAsiento;
+        this.tieneDescuento = tieneDescuento;
     }
 
     //Getters
 
     public String getIdBoleto() {
 
-        return IdBoleto;
+        return idBoleto;
     }
 
     public String getSala() {
@@ -33,59 +38,32 @@ Boolean TieneDescuento;
     }
 
     public String getAsiento() {
-        return Asiento;
+        return asiento;
     }
 
     public String getCliente() {
-        return Cliente;
+        return cliente;
     }
 
     public String getPelicula() {
-        return Pelicula;
+        return pelicula;
     }
 
     public String getPrecio() {
-        return Precio;
+        return precio;
     }
 
     public String getTipoAsiento() {
-        return TipoAsiento;
+        return tipoAsiento;
     }
 
     public Boolean getTieneDescuento() {
-        return TieneDescuento;
-    }
-    //Setters
-
-    public void setIdBoleto(String idBoleto) {
-        IdBoleto = idBoleto;
+        return tieneDescuento;
     }
 
-    public void setSala(String sala) {
-        this.sala = sala;
-    }
-
-    public void setAsiento(String asiento) {
-        Asiento = asiento;
-    }
-
-    public void setCliente(String cliente) {
-        Cliente = cliente;
-    }
-
-    public void setPelicula(String pelicula) {
-        Pelicula = pelicula;
-    }
-
-    public void setPrecio(String precio) {
-        Precio = precio;
-    }
-
-    public void setTipoAsiento(String tipoAsiento) {
-        TipoAsiento = tipoAsiento;
-    }
-
-    public void setTieneDescuento(Boolean tieneDescuento) {
-        TieneDescuento = tieneDescuento;
+    public void generarIdBoleto(Proyeccion proyeccion, Cliente cliente) {
+        String nombre = cliente.getNombre();
+        Salas numeroDeSala = proyeccion.getSala();
+        Pelicula nombrePelicula = proyeccion.getPelicula();
     }
 }
