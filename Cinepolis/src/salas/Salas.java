@@ -101,15 +101,15 @@ public class Salas {
         return datosSalas;
     }
 
-    public String mostrarAsientos(){
-        String vistaAsientos = "";
+    public void mostrarAsientos(){
         String filas = "ABCDEFGHIJKL";
         for (int i = 0; i < matrizAsientos.length; i++) {
-            vistaAsientos += String.format("Fila %s \n",filas.charAt(i));
+            char filaAsientos = filas.charAt(i);
             for (int j = 0; j < matrizAsientos[i].length; j++) {
-
+                String vistaAsientos = String.format("%c%d", filaAsientos, j +1);
+                System.out.print(vistaAsientos +"  ");
             }
+            System.out.println();
         }
-        return vistaAsientos;
     }
 }

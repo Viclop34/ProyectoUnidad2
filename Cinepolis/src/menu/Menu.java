@@ -204,7 +204,7 @@ public class Menu {
                     System.out.println("Ingrese el horario deseado");
                     String horario = scanner.nextLine();
                     System.out.println("Ingresa el asiento deseado");
-                    System.out.println(salas2.mostrarAsientos());
+                    salas2.mostrarAsientos();
 
                     break;
                 case 2:
