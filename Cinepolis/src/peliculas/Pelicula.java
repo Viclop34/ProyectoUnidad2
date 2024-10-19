@@ -1,6 +1,7 @@
 package peliculas;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Pelicula {
     String idPelicula;
@@ -10,9 +11,9 @@ public class Pelicula {
     String clasificacion;
     String sinopsis;
     String autor;
-    LocalDate fechaEstreno;
+    LocalDateTime fechaEstreno;
 
-    public Pelicula(String id, String titulo, String duracion, String genero, String clasificacion, String sinopsis, String autor, LocalDate fechaEstreno) {
+    public Pelicula(String id, String titulo, String duracion, String genero, String clasificacion, String sinopsis, String autor, LocalDateTime fechaEstreno) {
         this.idPelicula = id;
         this.titulo = titulo;
         this.duracion = duracion;
@@ -55,7 +56,7 @@ public class Pelicula {
         return idPelicula;
     }
 
-    public LocalDate getFechaEstreno() {
+    public LocalDateTime getFechaEstreno() {
         return fechaEstreno;
     }
 
@@ -89,7 +90,7 @@ public class Pelicula {
     }
 
 
-    public void setFechaEstreno(LocalDate fechaEstreno) {
+    public void setFechaEstreno(LocalDateTime fechaEstreno) {
         this.fechaEstreno = fechaEstreno;
     }
 

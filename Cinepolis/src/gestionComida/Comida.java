@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Comida {
     //Comida
-    int idComida;
+    String idComida;
     String nombreComida; //palomitas, cheetos,etc
     String descripcionComida;
     String categoriaComida;
@@ -16,7 +16,7 @@ public class Comida {
     TipoComida tipoComida;
     LocalDateTime fecha = LocalDateTime.now();
     //constructor
-    public Comida(int idComida,
+    public Comida(String idComida,
                   String nombreComida,
                   String descripcionComida,
                   String categoriaComida,
@@ -31,7 +31,7 @@ public class Comida {
         this.tipoComida = tipoComida;
     }
    //Getters
-    public int getIdComida() {
+    public String getIdComida() {
         return idComida;
     }
     public String getNombreComida() {
@@ -52,7 +52,7 @@ public class Comida {
     }
 
     //setters
-    public void setIdComida(int idComida) {
+    public void setIdComida(String idComida) {
         this.idComida = idComida;
     }
     public void setNombreComida(String nombreComida) {
