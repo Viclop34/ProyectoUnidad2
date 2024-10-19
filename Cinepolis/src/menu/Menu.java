@@ -48,6 +48,7 @@ public class Menu {
         cine.agregarACartelera(cNuevaPelicula);
     //
         while (intentosUsuario < intentosMaximos) {
+            scanner.nextLine();
             System.out.println("\nBienvenido\n");
             System.out.println("¿Ya cuentas con cuenta cinepolis? Si/No");
             String respuesta = scanner.nextLine();
@@ -348,6 +349,7 @@ public class Menu {
                     scanner.nextLine();
                     System.out.println("Ingrese el nombre de la pelicula: ");
                     String nombrePeliculaAValidar = scanner.nextLine();
+
                     while(!cine.validarNombrePelicula(nombrePeliculaAValidar)){
                         System.out.println("Nombre no encontrado");
                         System.out.println("Ingrese el nombre de la pelicula: ");
@@ -363,14 +365,61 @@ public class Menu {
                         System.out.println("LISTAR SALAS");
                         cine.listarSalas();
                         break;
+
                         case 11:
+                            scanner.nextLine();
                             System.out.println("CREAR PROYECCION");
+                            System.out.println("Ingrese el id de la sala: ");
+                            String idSala1 = scanner.nextLine();
+                            Salas salas1 = cine.obtenerSala(idSala1);
+
+                            while(!cine.validarSalas(idSala1)){
+                                System.out.println("Sala no encontrada");
+                                System.out.println("Ingrese el id de la sala: ");
+                                idSala1 = scanner.nextLine();
+                            }
+
+                            Pelicula pelicula1 = cine.obtenerPelicula(idSala1);
+
+                            LocalDateTime fechaActual = LocalDateTime.now();
+                            int anoActual = fechaActual.getYear();
+                            System.out.println("El mes de la proyeccion");
+                            int mesDeseado = scanner.nextInt();
+                            System.out.println("El dia de la proyeccion");
+                            int diaDeseado = scanner.nextInt();
+                            System.out.println("La hora de la proyeccion");
+                            int horaDeseado = scanner.nextInt();
+                            System.out.println("Los minutos de de la proyeccion");
+                            int minutosDeseados = scanner.nextInt();
+
+                            LocalDateTime fechaDeProyeccion = LocalDateTime.of(anoActual,mesDeseado,diaDeseado,horaDeseado,minutosDeseados);
+                            while (!cine.validarFechaValida(fechaDeProyeccion)){
+                                System.out.println("FECHA UBICADA EN  EL PASADO");
+                                anoActual = fechaActual.getYear();
+                                System.out.println("El mes de la proyeccion");
+                                mesDeseado = scanner.nextInt();
+                                System.out.println("El dia de la proyeccion");
+                                diaDeseado = scanner.nextInt();
+                                System.out.println("La hora de la proyeccion");
+                                horaDeseado = scanner.nextInt();
+                                System.out.println("Los minutos de de la proyeccion");
+                                minutosDeseados = scanner.nextInt();
+                                fechaDeProyeccion = LocalDateTime.of(anoActual,mesDeseado,diaDeseado,horaDeseado,minutosDeseados);
+                            }
+
+                            Proyeccion proyeccion = new Proyeccion(pelicula1, fechaDeProyeccion, salas1);
+                            cine.agregarProyeccion(proyeccion);
+
+                            System.out.println("Proyeccion agregada exitosamente");
 
                             break;
+
                             case 12:
-                                System.out.println("LISTAR PROYECCION");
+                                System.out.println("LISTAR PROYECCIONES");
+                                cine.mostrarProyecciones();
                                 break;
                                 case 13:
+
                                     System.out.println("LISTAR CLIENTES");
                                     break;
                                     case 14:

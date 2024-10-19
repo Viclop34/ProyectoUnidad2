@@ -4,13 +4,14 @@ import peliculas.Pelicula;
 import salas.Salas;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Proyeccion {
     public Pelicula pelicula;
-    public LocalDate horario;
+    public LocalDateTime horario;
     public Salas sala;
 
-    public Proyeccion(Pelicula pelicula, LocalDate horario, Salas salas) {
+    public Proyeccion(Pelicula pelicula, LocalDateTime horario, Salas salas) {
         this.pelicula = pelicula;
         this.horario = horario;
         this.sala= salas;
@@ -20,7 +21,7 @@ public class Proyeccion {
         return pelicula;
     }
 
-    public LocalDate getHorario() {
+    public LocalDateTime getHorario() {
         return horario;
     }
 
@@ -32,11 +33,16 @@ public class Proyeccion {
         this.pelicula = pelicula;
     }
 
-    public void setHorario(LocalDate horario) {
+    public void setHorario(LocalDateTime horario) {
         this.horario = horario;
     }
 
     public void setSala(Salas sala) {
         this.sala = sala;
+    }
+
+    public String mostrarDatos(){
+        String datos= String.format("Id de la sala donde se proyecta: %s, Hora de proyección: %s Nombre de la pelicula: %s", sala.getIdSalas(),horario, pelicula.getTitulo());
+        return datos;
     }
 }

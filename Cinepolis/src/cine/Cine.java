@@ -414,28 +414,11 @@ public class Cine {
         listaProyecciones.add(proyeccion);
     }
 
-    public void agregarProyeccion(int idSalas, Pelicula pelicula, LocalDate horario) {
-        for (Salas salas : listaSalas) {
-            if (salas.getIdSalas().equals(idSalas)) {
-                Proyeccion proyeccion = new Proyeccion(pelicula, horario,salas);
-                listaProyecciones.add(proyeccion);
-                System.out.println("Proyección de '" + pelicula.getTitulo() + "' agregada a la sala " + idSalas + " a las " + horario + ".");
-                return;
-            }
+
+    public void mostrarProyecciones() {
+        for (Proyeccion proyeccion : listaProyecciones) {
+            System.out.println(proyeccion.mostrarDatos());
         }
-        System.out.println("La sala " + idSalas + " no existe.");
-    }
-    public void mostrarProyecciones(int IdSalas) {
-        for (Salas sala : listaSalas) {
-            if (sala.getIdSalas().equals(IdSalas)){
-                System.out.println("Proyecciones en la sala " + IdSalas + ":");
-                for (Proyeccion proyeccion : sala.getListaProyecciones()) {
-                    System.out.println(" - " + proyeccion.getPelicula().getTitulo() + " a las " + proyeccion.getHorario());
-                }
-                return;
-            }
-        }
-        System.out.println("La sala " + IdSalas + " no existe.");
     }
     public String generarIdSalas() {
         int diaActual = LocalDate.now().getDayOfMonth();
@@ -461,6 +444,33 @@ public class Cine {
             }
         }
         return false;
+    }
+
+    public boolean validarSalas(String idSala){
+        for (Salas sala: listaSalas){
+            if(sala.getIdSalas().equals(idSala)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Pelicula obtenerPelicula(String idSala) {
+        for (Pelicula pelicula : listaPeliculas) {
+            if(pelicula.getTitulo().equals(idSala)) {
+                return pelicula;
+            }
+        }
+        return null;
+    }
+
+    public Salas obtenerSala(String idSala) {
+        for (Salas salas : listaSalas) {
+            if(salas.getIdSalas().equals(idSala)) {
+                return salas;
+            }
+        }
+        return null;
     }
 
 }
