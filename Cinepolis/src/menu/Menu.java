@@ -5,6 +5,7 @@ import boletos.Boletos;
 import cine.Cine;
 import gestionComida.Comida;
 import gestionComida.GestionComida;
+import gestionPeliculas.Proyeccion;
 import peliculas.Pelicula;
 import resources.CalidadAsiento;
 import resources.Rol;
@@ -364,6 +365,7 @@ public class Menu {
                         break;
                         case 11:
                             System.out.println("CREAR PROYECCION");
+
                             break;
                             case 12:
                                 System.out.println("LISTAR PROYECCION");

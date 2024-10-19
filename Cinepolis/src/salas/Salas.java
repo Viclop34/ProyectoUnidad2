@@ -16,6 +16,8 @@ public class Salas {
     int cantidadAsientosVIP;
     int cantidadAsientosPremium;
     String pelicula;
+    List<Proyeccion> listaProyecciones;
+
 
     public Salas(String id, int capacidadAsientos, Asientos [][] matrizAsientos, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
         this.idSalas = id;
@@ -24,10 +26,16 @@ public class Salas {
         this.cantidadAsientosVIP = cantidadAsientosVIP;
         this.cantidadAsientosPremium = cantidadAsientosPremium;
         this.pelicula = pelicula;
+        this.listaProyecciones = listaProyecciones;
+
     }
 
     //Getters
     public String getIdSalas() {return idSalas;}
+
+    public List<Proyeccion> getListaProyecciones() {
+        return listaProyecciones;
+    }
 
     public int getCapacidadAsientos() {
         return capacidadAsientos;
@@ -49,6 +57,7 @@ public class Salas {
         return cantidadAsientosPremium;
     }
 
+
     public String getPelicula() {
         return pelicula;
     }
@@ -58,6 +67,12 @@ public class Salas {
     public void setId(String id) {
         this.idSalas = id;
     }
+
+    public void setIdSalas(String idSalas) {
+        this.idSalas = idSalas;
+    }
+
+
 
     public void setCapacidadAsientos(int capacidadAsientos) {
         this.capacidadAsientos = capacidadAsientos;

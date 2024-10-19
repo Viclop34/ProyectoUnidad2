@@ -274,7 +274,7 @@ public class Cine {
                 scanner.nextLine();
                 System.out.print("Ingrese la nueva duración (o presione Enter para mantenerla): ");
                 int nuevaDuracion = scanner.nextInt();
-                    pelicula.setDuracion(nuevaDuracion);
+                pelicula.setDuracion(nuevaDuracion);
 
                 scanner.nextLine();
                 System.out.print("Ingrese el nuevo género (o presione Enter para mantenerlo): ");
@@ -410,7 +410,7 @@ public class Cine {
         }
     }
 
-/*    public void agregarProyeccion(Proyeccion proyeccion) {
+    public void agregarProyeccion(Proyeccion proyeccion) {
         listaProyecciones.add(proyeccion);
     }
 
@@ -418,7 +418,7 @@ public class Cine {
         for (Salas salas : listaSalas) {
             if (salas.getIdSalas().equals(idSalas)) {
                 Proyeccion proyeccion = new Proyeccion(pelicula, horario,salas);
-                salas.agregarProyeccion(proyeccion);
+                listaProyecciones.add(proyeccion);
                 System.out.println("Proyección de '" + pelicula.getTitulo() + "' agregada a la sala " + idSalas + " a las " + horario + ".");
                 return;
             }
@@ -429,14 +429,14 @@ public class Cine {
         for (Salas sala : listaSalas) {
             if (sala.getIdSalas().equals(IdSalas)){
                 System.out.println("Proyecciones en la sala " + IdSalas + ":");
-                for (Proyeccion proyeccion : sala.getProyecciones()) {
+                for (Proyeccion proyeccion : sala.getListaProyecciones()) {
                     System.out.println(" - " + proyeccion.getPelicula().getTitulo() + " a las " + proyeccion.getHorario());
                 }
                 return;
             }
         }
         System.out.println("La sala " + IdSalas + " no existe.");
-    }*/
+    }
     public String generarIdSalas() {
         int diaActual = LocalDate.now().getDayOfMonth();
         int numeroAleatorio = new Random().nextInt(100000 - 50) + 50;
