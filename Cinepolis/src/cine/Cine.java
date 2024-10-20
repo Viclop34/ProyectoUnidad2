@@ -1,7 +1,9 @@
 package cine;
 
 import asientos.Asientos;
-import gestionPeliculas.GestionPeliculas;
+import boletos.Boletos;
+import gestionComida.Comida;
+import gestionPeliculas.Proyeccion;
 import peliculas.Pelicula;
 import resources.CalidadAsiento;
 import salas.Salas;
@@ -22,12 +24,12 @@ public class Cine {
     public ArrayList<Admin> listaAdmin = new ArrayList<>();
     public Scanner scanner = new Scanner(System.in);
     public ArrayList<Pelicula> listaPeliculas = new ArrayList<>();
-    public ArrayList<Pelicula> proximosEstrenos = new ArrayList<>();
     public ArrayList<Pelicula> carteleraActual = new ArrayList<>();
-    ArrayList<Pelicula> peliculasEstrenadas = new ArrayList<>();
+    public ArrayList<Comida> listaComida = new ArrayList<>();
+    ArrayList<Proyeccion> listaProyecciones= new ArrayList<>();
+    public ArrayList<Salas> listaSalas= new ArrayList<>();
 
-    private GestionPeliculas gestionPeliculas = new GestionPeliculas();
-    public String asientos[][] = new String[12][10];
+
     Random random = new Random();
     LocalDateTime fecha = LocalDateTime.now();
 
@@ -49,6 +51,12 @@ public class Cine {
     public void listarClientes() {
         for (Cliente cliente : listaClientes) {
             System.out.println(cliente.mostrarDatosCliente());
+        }
+    }
+
+    public void listarCartelera() {
+        for (Pelicula pelicula : carteleraActual) {
+            System.out.println(pelicula.mostrarDatosPeliculas());
         }
     }
 
@@ -82,25 +90,7 @@ public class Cine {
     }
 
     // MÉTODOS RELACIONADOS CON ASIENTOS
-    public void generarAsientos() {
-        String filas = "ABCDEFGHIJKL";
 
-        for (int i = 0; i < 12; i++) { // filas
-            for (int j = 0; j < 10; j++) { // columnas
-                char letraUno = filas.charAt(i);
-                String numeroAsiento = letraUno + Integer.toString(j);
-
-                Asientos asiento;
-                if (i >= 0 && i <= 3) {
-                    asiento = new Asientos(numeroAsiento, CalidadAsiento.VIP);
-                } else {
-                    asiento = new Asientos(numeroAsiento, CalidadAsiento.PREMIUM);
-                }
-                // Almacenar el asiento en la matriz
-                this.asientos[i][j] = numeroAsiento;
-            }
-        }
-    }
 
     public boolean precioTipoAsiento(Asientos asiento) {
         CalidadAsiento calidadValidar = asiento.getTipoAsiento();
@@ -114,16 +104,34 @@ public class Cine {
     }
 
     // MÉTODOS RELACIONADOS CON BOLETOS
-    public String generarIdBoleto(Asientos asientos, Cliente cliente) {
-        String asiento = asientos.getNumeroAsiento(); // Corregido
+    public String generarIdBoleto(Cliente cliente, String nombrePelicula, String horario, String asiento) {
         String idCliente = cliente.getId();
-        int numeroRandom = ThreadLocalRandom.current().nextInt(1, 3000);
-        return String.format("%s-%s-%d", asiento, idCliente, numeroRandom);
+        String inicialesPelicula = nombrePelicula.substring(0, 3).toUpperCase();
+        String idAsiento = asiento.toUpperCase();
+        String timestamp = String.valueOf(System.currentTimeMillis());
+
+        return idCliente + "" + inicialesPelicula + "" + horario + "" + idAsiento + "" + timestamp;
     }
 
     public void imprimirBoleto(String idBoleto, Asientos asientos, Cliente cliente, Salas salas) {
-        double costo = precioTipoAsiento(asientos) ? 200 : 400; // Definir el costo
-        String asiento = asientos.getNumeroAsiento(); // Corregido
+        double costo = 0;
+        boolean descuentoAplicado = false;
+
+        if (confirmarMesCumpleanos(cliente)) {
+            if (asientos.getTipoAsiento() == CalidadAsiento.PREMIUM) {
+                costo = 200 * (1 - 0.60); // Precio original menos el 60%
+                descuentoAplicado = true;
+            } else if (asientos.getTipoAsiento() == CalidadAsiento.VIP) {
+                costo = 400 * (1 - 0.35); // Precio original menos el 35%
+                descuentoAplicado = true;
+            }
+        }
+        // Si no se aplicó descuento
+        if (!descuentoAplicado) {
+            costo = precioTipoAsiento(asientos) ? 200 : 400; // costo sin descuento
+        }
+
+        String asiento = asientos.getNumeroAsiento();
         String nombreCliente = cliente.getNombre();
         String tipoAsiento = asientos.getTipoAsiento().toString();
         String pelicula = salas.getPelicula();
@@ -132,6 +140,7 @@ public class Cine {
         System.out.printf("Boleto: %s\nCliente: %s\nAsiento: %s\nTipo Asiento: %s\nPelicula: %s\nSala: %s\nCosto: %.2f\n",
                 idBoleto, nombreCliente, asiento, tipoAsiento, pelicula, idSala, costo);
     }
+
 
     public boolean validacionCurp(String curp) {
         if (curp.length() != 18) {
@@ -182,7 +191,7 @@ public class Cine {
     }
     public Cine (){
         LocalDate fechaDeNacimiento = LocalDate.of(2005,03,22);
-        Admin administrador= new Admin("Admin1","Mariana", "Herrejon",fechaDeNacimiento,"123");
+        Admin administrador= new Admin("Admin1","Juana", "Martinez",fechaDeNacimiento,"123");
         registrarAdmin(administrador);
         this.listaUsuarios.add(administrador);
         this.listaAdmin.add(administrador);
@@ -223,7 +232,7 @@ public class Cine {
                 pelicula.setTitulo(scanner.nextLine());
 
                 System.out.print("Nueva duración (minutos): ");
-                pelicula.setDuracion(scanner.nextLine());
+                pelicula.setDuracion(scanner.nextInt());
 
                 System.out.print("Nuevo género: ");
                 pelicula.setGenero(scanner.nextLine());
@@ -241,11 +250,6 @@ public class Cine {
         System.out.println("Película no encontrada.");
     }
 
-    // Agregar película a próximos estrenos
-    public void agregarProximoEstreno(Pelicula pelicula) {
-        proximosEstrenos.add(pelicula);
-        System.out.println("Película '" + pelicula.getTitulo() + "' agregada a próximos estrenos.");
-    }
 
     // Agregar película a cartelera
     public void agregarACartelera(Pelicula pelicula) {
@@ -253,78 +257,67 @@ public class Cine {
         System.out.println("Película '" + pelicula.getTitulo() + "' agregada a cartelera.");
     }
 
-
-    // Mostrar próximos estrenos
-    public void mostrarProximosEstrenos() {
-        System.out.println("Próximos estrenos:");
-        for (Pelicula pelicula : proximosEstrenos) {
-            System.out.println(" - " + pelicula.getTitulo() + " (Fecha de estreno: " + pelicula.getFechaEstreno() + ")");
-        }
-    }
-
-    // Actualizar cartelera: mover películas de "próximos estrenos" a "cartelera" si ya se estrenaron
-    public void actualizarCartelera() {
-        LocalDate hoy = LocalDate.now();
-
-        for (Pelicula pelicula : proximosEstrenos) {
-            if (pelicula.getFechaEstreno().isBefore(hoy) || pelicula.getFechaEstreno().isEqual(hoy)) {
-                agregarACartelera(pelicula);
-                peliculasEstrenadas.add(pelicula);
-            }
-        }
-        proximosEstrenos.removeAll(peliculasEstrenadas);
-    }
-
-    public void modificarProximoEstreno(ArrayList<Pelicula> listaPeliculas) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Ingrese el ID de la película que desea modificar: ");
+    public void modificarCartelera() {
+        System.out.print("Ingrese el ID de la película que desea modificar o eliminar: ");
         String idPelicula = scanner.nextLine();
+        Pelicula pelicula = null;
 
         // Buscar la película por su ID
-        for (Pelicula pelicula : listaPeliculas) {
-            if (pelicula.getIdPelicula().equals(idPelicula)) {
-                System.out.println("Detalles actuales de la película:");
-                System.out.println("Título: " + pelicula.getTitulo());
-                System.out.println("Duración: " + pelicula.getDuracion());
-                System.out.println("Género: " + pelicula.getGenero());
-                System.out.println("Clasificación: " + pelicula.getClasificacion());
-                System.out.println("Sinopsis: " + pelicula.getSinopsis());
-                System.out.println("Autor: " + pelicula.getAutor());
-                System.out.println("Fecha de Estreno: " + pelicula.getFechaEstreno());
+        for (Pelicula peliculaEnLista : listaPeliculas) {
+            if (peliculaEnLista.getIdPelicula().equals(idPelicula)) {
+                pelicula = peliculaEnLista;
+            }
+        }
 
+        if (pelicula == null) {
+            System.out.println("No se encontró ninguna película con el ID especificado.");
+            return;
+        }
 
+        System.out.println("\n¿Qué desea hacer con esta película?");
+        System.out.println("1. Modificar detalles");
+        System.out.println("2. Eliminar película");
+        System.out.println("3. Cancelar");
+        System.out.print("Seleccione una opción: ");
+        int opcion = scanner.nextInt();
+        scanner.nextLine();  // Limpiar el buffer
+
+        switch (opcion) {
+            case 1: // Modificar detalles
                 // Modificar detalles
+                scanner.nextLine();
                 System.out.print("Ingrese el nuevo título (o presione Enter para mantenerlo): ");
                 String nuevoTitulo = scanner.nextLine();
                 if (!nuevoTitulo.isEmpty()) {
                     pelicula.setTitulo(nuevoTitulo);
                 }
-
+                scanner.nextLine();
                 System.out.print("Ingrese la nueva duración (o presione Enter para mantenerla): ");
-                String nuevaDuracion = scanner.nextLine();
-                if (!nuevaDuracion.isEmpty()) {
-                    pelicula.setDuracion(nuevaDuracion);
-                }
+                int nuevaDuracion = scanner.nextInt();
+                pelicula.setDuracion(nuevaDuracion);
 
+                scanner.nextLine();
                 System.out.print("Ingrese el nuevo género (o presione Enter para mantenerlo): ");
                 String nuevoGenero = scanner.nextLine();
                 if (!nuevoGenero.isEmpty()) {
                     pelicula.setGenero(nuevoGenero);
                 }
 
+                scanner.nextLine();
                 System.out.print("Ingrese la nueva clasificación (o presione Enter para mantenerla): ");
                 String nuevaClasificacion = scanner.nextLine();
                 if (!nuevaClasificacion.isEmpty()) {
                     pelicula.setClasificacion(nuevaClasificacion);
                 }
 
+                scanner.nextLine();
                 System.out.print("Ingrese la nueva sinopsis (o presione Enter para mantenerla): ");
                 String nuevaSinopsis = scanner.nextLine();
                 if (!nuevaSinopsis.isEmpty()) {
                     pelicula.setSinopsis(nuevaSinopsis);
                 }
 
+                scanner.nextLine();
                 System.out.print("Ingrese el nuevo autor (o presione Enter para mantenerlo): ");
                 String nuevoAutor = scanner.nextLine();
                 if (!nuevoAutor.isEmpty()) {
@@ -332,93 +325,192 @@ public class Cine {
                 }
 
                 System.out.println("Detalles de la película actualizados correctamente.");
-                return;
-            }
-        }
-        System.out.println("No se encontró ninguna película con el ID especificado.");
-    }
+                break;
 
-    public void modificarCartelera() {
-
-
-        System.out.print("Ingrese el ID de la película que desea modificar o eliminar: ");
-        String idPelicula = scanner.nextLine();
-
-        // Buscar la película por su ID
-        for (Pelicula pelicula : listaPeliculas) {
-            if (pelicula.getIdPelicula().equals(idPelicula)) {System.out.println("\n¿Qué desea hacer con esta película?");
-                System.out.println("1. Modificar detalles");
-                System.out.println("2. Eliminar película");
-                System.out.println("3. Cancelar");
-                System.out.print("Seleccione una opción: ");
-                int opcion = scanner.nextInt();
-                scanner.nextLine();  // Limpiar el buffer
-
-                switch (opcion) {
-                    case 1: // Modificar detalles
-                        // Modificar detalles
-                        System.out.print("Ingrese el nuevo título (o presione Enter para mantenerlo): ");
-                        String nuevoTitulo = scanner.nextLine();
-                        if (!nuevoTitulo.isEmpty()) {
-                            pelicula.setTitulo(nuevoTitulo);
+            case 2: // Eliminar película
+                System.out.print("¿Está seguro de que desea eliminar la película? (s/n): ");
+                String confirmacion = scanner.nextLine();
+                if (confirmacion.equalsIgnoreCase("s")) {
+                    int indexPelicula = 0;
+                    for (Pelicula peliculaEnCartelera : carteleraActual) {
+                        if (peliculaEnCartelera.getIdPelicula().equals(idPelicula)){
+                            carteleraActual.remove(indexPelicula);
+                            break;
                         }
-
-                        System.out.print("Ingrese la nueva duración (o presione Enter para mantenerla): ");
-                        String nuevaDuracion = scanner.nextLine();
-                        if (!nuevaDuracion.isEmpty()) {
-                            pelicula.setDuracion(nuevaDuracion);
+                        indexPelicula++;
+                    }
+                    indexPelicula = 0;
+                    for (Pelicula peliculaEnLista : listaPeliculas) {
+                        if (peliculaEnLista.getIdPelicula().equals(idPelicula)){
+                            listaPeliculas.remove(indexPelicula);
+                            break;
                         }
+                        indexPelicula++;
+                    }
 
-                        System.out.print("Ingrese el nuevo género (o presione Enter para mantenerlo): ");
-                        String nuevoGenero = scanner.nextLine();
-                        if (!nuevoGenero.isEmpty()) {
-                            pelicula.setGenero(nuevoGenero);
-                        }
 
-                        System.out.print("Ingrese la nueva clasificación (o presione Enter para mantenerla): ");
-                        String nuevaClasificacion = scanner.nextLine();
-                        if (!nuevaClasificacion.isEmpty()) {
-                            pelicula.setClasificacion(nuevaClasificacion);
-                        }
-
-                        System.out.print("Ingrese la nueva sinopsis (o presione Enter para mantenerla): ");
-                        String nuevaSinopsis = scanner.nextLine();
-                        if (!nuevaSinopsis.isEmpty()) {
-                            pelicula.setSinopsis(nuevaSinopsis);
-                        }
-
-                        System.out.print("Ingrese el nuevo autor (o presione Enter para mantenerlo): ");
-                        String nuevoAutor = scanner.nextLine();
-                        if (!nuevoAutor.isEmpty()) {
-                            pelicula.setAutor(nuevoAutor);
-                        }
-
-                        System.out.println("Detalles de la película actualizados correctamente.");
-                        break;
-
-                    case 2: // Eliminar película
-                        System.out.print("¿Está seguro de que desea eliminar la película? (s/n): ");
-                        String confirmacion = scanner.nextLine();
-                        if (confirmacion.equalsIgnoreCase("s")) {
-                            listaPeliculas.remove(pelicula);
-                            System.out.println("Película eliminada de la cartelera.");
-                        } else {
-                            System.out.println("Eliminación cancelada.");
-                        }
-                        break;
-
-                    case 3: // Cancelar
-                        System.out.println("Operación cancelada.");
-                        return;
-
-                    default:
-                        System.out.println("Opción no válida. Operación cancelada.");
+                    System.out.println("Película eliminada de la cartelera.");
+                } else {
+                    System.out.println("Eliminación cancelada.");
                 }
+                break;
+
+            case 3: // Cancelar
+                System.out.println("Operación cancelada.");
+                return;
+
+            default:
+                System.out.println("Opción no válida. Operación cancelada.");
+        }
+    }
+
+    public boolean validarFechaValida (LocalDateTime fecha) {
+        LocalDateTime fechaActual = LocalDateTime.now();
+        if (fecha.isBefore(fechaActual)){
+            return false;
+        }
+        return true;
+    }
+
+    public void registrarComida(Comida comida) {
+        listaComida.add(comida);
+    }
+
+    public void modificarComida(String nombreComida) {
+        Scanner sc = new Scanner(System.in);
+        Comida comida = null;
+        for (Comida comidaEnLista : listaComida) {
+            if (comidaEnLista.getNombreComida().equals(nombreComida)) {
+                comida = comidaEnLista;
             }
         }
-        System.out.println("No se encontró ninguna película con el ID especificado.");
+        if (comida == null) {
+            System.out.println("El comida no existe");
+        }
+        int opcion = 0;
+        while (opcion != 3) {
+            System.out.println("Ingrese la opcion deseada: ");
+            System.out.println("1.Eliminar comida ");
+            System.out.println("2.Modificar precio ");
+            System.out.println("3.Salir ");
+            opcion = sc.nextInt();
+            switch (opcion) {
+                case 1:
+                    System.out.println(" Haz elegido la opcion eliminar comida ");
+                    int indexComida = 0;
+                    for (Comida comidaEnLista : listaComida) {
+                        if (comidaEnLista.getNombreComida().equals(nombreComida)) {
+                            listaComida.remove(indexComida);
+                            break;
+                        }
+                        indexComida++;
+                    }
+                    System.out.println("La comida ha sido eliminada correctamente ");
+                    break;
+                case 2:
+                    System.out.println("Haz elegido la opcion modificar precio ");
+                    System.out.println("Ingrese el nuevo precio: ");
+                    Double precio = sc.nextDouble();
+                    for(Comida comida1 : listaComida) {
+                        if (comida1.getNombreComida().equals(nombreComida)) {
+                            comida1.setPrecioComida(precio);
+                        }
+                    }
+                    System.out.println("La comida ha sido modificada correctamente ");
+                    break;
+                case 3:
+                    return;
+            }
+        }
+    }
+
+    public void listarComida(){
+        for (Comida comida: listaComida){
+            System.out.println(comida.mostrarInfoComida());
+        }
+    }
+
+    public void agregarProyeccion(Proyeccion proyeccion) {
+        listaProyecciones.add(proyeccion);
     }
 
 
+    public void mostrarProyecciones() {
+        for (Proyeccion proyeccion : listaProyecciones) {
+            System.out.println(proyeccion.mostrarDatos());
+        }
+    }
+    public String generarIdSalas() {
+        int diaActual = LocalDate.now().getDayOfMonth();
+        int numeroAleatorio = new Random().nextInt(100000 - 50) + 50;
+        return String.format("CO-%d-%d-%d", listaSalas.size() + 1, numeroAleatorio, diaActual);
+    }
+    public void registrarSalas(Salas salas) {
+        listaSalas.add(salas);
+        System.out.println("Sala agregada exitosamente.");
+
+    }
+    public void listarSalas(){
+        for(Salas sala : listaSalas){
+            System.out.println(sala.mostrarDatosSala());
+        }
+    }
+
+    public boolean validarNombrePelicula(String nombrePelicula) {
+        for(Pelicula pelicula : listaPeliculas) {
+            if(pelicula.getTitulo().equals(nombrePelicula)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean validarSalas(String idSala){
+        for (Salas sala: listaSalas){
+            if(sala.getIdSalas().equals(idSala)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Pelicula obtenerPelicula(String idSala) {
+        Salas sala = obtenerSala(idSala);
+
+        for (Pelicula pelicula : listaPeliculas) {
+            if(pelicula.getTitulo().equals(sala.getPelicula())) {
+                return pelicula;
+            }
+        }
+        return null;
+    }
+
+    public Salas obtenerSala(String idSala) {
+        for (Salas salas : listaSalas) {
+            if(salas.getIdSalas().equals(idSala)) {
+                return salas;
+            }
+        }
+        return null;
+    }
+
+    public Salas obtenerSalaPorNumero(int sala) {
+        for (Salas salas : listaSalas) {
+            if(salas.getNumeroSala() == sala) {
+                return salas;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Proyeccion> obtenerProyeccionesPorPelicula(String nombrePelicula) {
+        ArrayList<Proyeccion> listaDeProyecciones = new ArrayList<>();
+        for (Proyeccion proyeccion : listaProyecciones) {
+            if(proyeccion.getPelicula().getTitulo().equals(nombrePelicula)) {
+                listaDeProyecciones.add(proyeccion);
+            }
+        }
+        return listaDeProyecciones;
+    }
 }
 

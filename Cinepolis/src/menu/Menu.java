@@ -5,8 +5,9 @@ import boletos.Boletos;
 import cine.Cine;
 import gestionComida.Comida;
 import gestionComida.GestionComida;
-import gestionPeliculas.GestionPeliculas;
+import gestionPeliculas.Proyeccion;
 import peliculas.Pelicula;
+import resources.CalidadAsiento;
 import resources.Rol;
 import resources.TipoComida;
 import salas.Salas;
@@ -14,29 +15,51 @@ import salas.gestionSalas.GestionSalas;
 import usuarios.Usuarios;
 import usuarios.admin.Admin;
 import usuarios.cliente.Cliente;
-
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
     private Scanner scanner = new Scanner(System.in);
     private Cine cine = new Cine();
-    private GestionPeliculas gestionPeliculas = new GestionPeliculas();
     private Pelicula pelicula;
     private GestionSalas gestionSalas;
     private Salas salas;
     private Boletos boletos;
     private Asientos asientos;
     private GestionComida gestionComida;
-    private Comida comida;
-// HESM050818MMNRLRA1
+    private Comida comida = new Comida();
+
+    // Constructor de la clase Menu
+    public Menu() {
+        this.gestionComida = new GestionComida(); // Inicializa la instancia de GestionComida
+    }
 
     public void login() {
         int intentosMaximos = 5;
         int intentosUsuario = 0;
+    // PELICULA PRUEBA
+        String cIdPelicula = cine.generarIdPelicula("Locas", "Pablo");
+        LocalDateTime cFechaEstreno = LocalDateTime.of(2025,7,20,5,10);
 
+        Pelicula cNuevaPelicula = new Pelicula(cIdPelicula, "Locas", 120, "Accion", "13"
+                , "fdsuhfksdhfsdjk", "Pablo", cFechaEstreno);
+        cine.registrarPelicula(cNuevaPelicula);
+        cine.agregarACartelera(cNuevaPelicula);
+    //
+
+        // CLIENTE PRUEBA
+        String cId = cine.generarIdCliente("Victor", "Lopez");
+        LocalDate cFechaNacimiento = LocalDate.of(2000, 4, 1);
+        Cliente cCliente = new Cliente(cId, "Victor", "Lopez", cFechaNacimiento, "cliente", "RACW050729MMCSHNA2", "kfdsjflksjf");
+        cCliente.setId("vic123");
+        cine.registrarCliente(cCliente);
+        //
+        //
         while (intentosUsuario < intentosMaximos) {
+            scanner.nextLine();
             System.out.println("\nBienvenido\n");
             System.out.println("¿Ya cuentas con cuenta cinepolis? Si/No");
             String respuesta = scanner.nextLine();
@@ -55,14 +78,13 @@ public class Menu {
                     if (usuarioEnSesion.getRol() == Rol.CLIENTE) {
                         Cliente clienteEnSesion = (Cliente) usuarioEnSesion;
                         this.mostrarMenuCliente(clienteEnSesion);
-                        return;
+                        intentosUsuario = 0;
                     } else {
                         Admin administradorEnSesion = (Admin) usuarioEnSesion;
                         this.mostrarMenuAdmin(administradorEnSesion);
                         intentosUsuario = 0;
                     }
                 }
-
 
                 intentosUsuario = mostrarErrorInicioSesion(intentosUsuario);
             } else {
@@ -90,7 +112,6 @@ public class Menu {
                 String curpCliente = scanner.nextLine();
 
                 while(!cine.validacionCurp(curpCliente)){
-
                     System.out.println("Ingresa una CURP válida: ");
                     curpCliente = scanner.nextLine();
                     cine.validacionCurp(curpCliente);
@@ -127,7 +148,7 @@ public class Menu {
             System.out.println("1. Comprar boletos");
             System.out.println("2. Ver películas de cartelera");
             System.out.println("3. Ver mis reservas");
-            System.out.println("4. Ver próximos estrenos");
+            System.out.println("4. Comprar alimentos");
             System.out.println("5. Salir");
             System.out.println("Selecciona una opción");
             opcion = scanner.nextInt();
@@ -135,16 +156,83 @@ public class Menu {
 
             switch (opcion) {
                 case 1:
-                    // Implementar lógica para comprar boletos
+                    System.out.println("COMPRAR BOLETOS");
+                    System.out.println("Ingrese el nombre de la película deseada:");
+                    String nombrePeliculaDeseada = scanner.nextLine();
+                    ArrayList<Proyeccion> proyeccionesPorPelicula = cine.obtenerProyeccionesPorPelicula(nombrePeliculaDeseada);
+
+                    ArrayList<Salas> salasPorProyeccion = new ArrayList<>();
+                    for (Proyeccion p : proyeccionesPorPelicula) {
+                        boolean valido = true;
+                        Salas salas1 = p.getSala();
+                        for (Salas sala : salasPorProyeccion) {
+                            if (sala.getIdSalas().equals(salas1.getIdSalas())) {
+                                valido = false;
+                                break;
+                            }
+                        }
+                        if (valido) {
+                            salasPorProyeccion.add(salas1);
+                        }
+                    }
+
+                    System.out.println("Salas disponibles:");
+                    for (int i = 0; i < salasPorProyeccion.size(); i++) {
+                        System.out.println((i+1) + ". " + salasPorProyeccion.get(i).mostrarDatosSala());
+                    }
+
+                    System.out.println("Ingrese el número de sala:");
+                    int sala = scanner.nextInt();
+                    Salas salaSeleccionada = salasPorProyeccion.get(sala - 1);
+
+                    ArrayList<String> HorariosPorProyeccion = new ArrayList<>();
+                    for (Proyeccion p : proyeccionesPorPelicula) {
+                        if (p.getSala().getIdSalas().equals(salaSeleccionada.getIdSalas())) {
+                            HorariosPorProyeccion.add(p.getHorario().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                        }
+                    }
+
+                    System.out.println("Horarios disponibles:");
+                    for (int i = 0; i < HorariosPorProyeccion.size(); i++) {
+                        System.out.println((i+1) + ". " + HorariosPorProyeccion.get(i));
+                    }
+
+                    scanner.nextLine(); // Limpiar buffer
+                    System.out.println("Ingrese el número del horario deseado:");
+                    int horarioIndex = scanner.nextInt();
+                    scanner.nextLine(); // Limpiar buffer
+                    String horarioSeleccionado = HorariosPorProyeccion.get(horarioIndex - 1);
+
+                    System.out.println("Ingresa el asiento deseado (Ejemplo: A1, B2):");
+                    salaSeleccionada.mostrarAsientos();
+                    String asientoSeleccionado = scanner.nextLine();
+
+                    boolean asientoDisponible = salaSeleccionada.comprobarDisponibilidadAsiento(asientoSeleccionado);
+                    if (asientoDisponible) {
+                        System.out.println("Asiento reservado exitosamente.");
+
+                        // Generar el ID del boleto y proceder a la impresión
+                        String idBoleto = cine.generarIdBoleto(clienteEnSesion, nombrePeliculaDeseada, horarioSeleccionado, asientoSeleccionado);
+                        System.out.println("ID de Boleto generado: " + idBoleto);
+
+                        System.out.println("Boleto generado exitosamente.");
+                    } else {
+                        System.out.println("El asiento ya está ocupado o no existe. Por favor selecciona otro.");
+                    }
                     break;
                 case 2:
+                    System.out.println("VER PELICULAS DE CARTELERA");
                     cine.mostrarCartelera();
                     break;
                 case 3:
-                    // Implementar lógica para ver reservas
+                    System.out.println("MIS RESERVAS");
+                    ArrayList<Boletos> misBoletos = clienteEnSesion.getBoletosReservados();
+                    for (Boletos boleto : misBoletos) {
+                        System.out.println("Boleto ID: " + boleto.getIdBoleto() + ", Película: " + boleto.getPelicula() + ", Asiento: " + boleto.getAsiento());
+                    }
                     break;
                 case 4:
-                    cine.mostrarProximosEstrenos();// Implementar lógica para ver próximos estrenos
+
                     break;
                 case 5:
                     System.out.println("Volviendo al menú principal...");
@@ -157,18 +245,22 @@ public class Menu {
 
     private void mostrarMenuAdmin(Admin administradorEnSesion) {
         int opcion = 0;
-        while (opcion != 7) {
+        while (opcion != 14) { // Cambié el límite a 9 para coincidir con las opciones
             System.out.println("\n*BIENVENIDO*");
             System.out.println("1. Registrar película");
             System.out.println("2. Modificar película");
             System.out.println("3. Listar peliculas");
             System.out.println("4. Modificar cartelera");
             System.out.println("5. Listar Cartelera");
-            System.out.println("5. Agregar comida a menu");
-            System.out.println("6. Modificar comida");
-            System.out.println("7. Listar clientes");
-            System.out.println("8. Listar proyecciones");
-            System.out.println("9. Salir");
+            System.out.println("6. Agregar comida a menu");
+            System.out.println("7. Modificar comida");
+            System.out.println("8. Listar comida");
+            System.out.println("9. Crear Sala");
+            System.out.println("10. Listar Sala");
+            System.out.println("11. Crear Proyeccion");
+            System.out.println("12. Listar Proyecciones");
+            System.out.println("13. Listar clientes");
+            System.out.println("14. Salir");
 
             System.out.print("\nSeleccione una opción:\n");
             opcion = scanner.nextInt();
@@ -189,28 +281,53 @@ public class Menu {
                     System.out.print("Ingrese el género de la película: ");
                     String genero = scanner.nextLine();
 
-                    System.out.println("Ingrese la clasificacion de la pelicula: ");
+                    System.out.println("Ingrese la clasificación de la película: ");
                     String clasificacion = scanner.nextLine();
 
                     System.out.print("Ingrese la duración de la película (en minutos): ");
-                    String duracion = scanner.nextLine();
-                    scanner.nextLine(); // Limpiar el buffer
+                    int duracion = scanner.nextInt();
+                    scanner.nextLine();
 
                     System.out.print("Ingrese la sinopsis de la película: ");
                     String sinopsis = scanner.nextLine();
 
-                    System.out.println("Ingrese el dia del estreno");
-                    int diaEstreno = scanner.nextInt();
+                    System.out.println("Ingrese el año del estreno");
+                    int anoEstreno = scanner.nextInt();
 
                     System.out.println("Ingrese el mes del estreno");
                     int mesEstreno = scanner.nextInt();
 
-                    System.out.println("Ingrese el ano del estreno");
-                    int anoEstreno = scanner.nextInt();
-                    validarFecha(diaEstreno, mesEstreno, anoEstreno);
+                    System.out.println("Ingrese el día del estreno");
+                    int diaEstreno = scanner.nextInt();
 
-                    LocalDate fechaEstreno = LocalDate.of(anoEstreno, mesEstreno, diaEstreno);
-                    Pelicula nuevaPelicula = new Pelicula(idPelicula,titulo,duracion,genero,clasificacion, sinopsis, autor, fechaEstreno);
+                    System.out.println("Ingrese la hora del estreno");
+                    int horaEstreno= scanner.nextInt();
+
+                    System.out.println("Ingrese la minuto del estreno");
+                    int minutoEstreno = scanner.nextInt();
+
+                    LocalDateTime fechaEstreno = LocalDateTime.of(anoEstreno,mesEstreno,diaEstreno,horaEstreno,minutoEstreno);
+                    while(!cine.validarFechaValida(fechaEstreno)){
+                        scanner.nextLine();
+                        System.out.println("FECHA UBICADA EN EL PASADO");
+
+                        System.out.println("Ingrese el año del estreno");
+                        anoEstreno = scanner.nextInt();
+
+                        System.out.println("Ingrese el mes del estreno");
+                        mesEstreno = scanner.nextInt();
+
+                        System.out.println("Ingrese el día del estreno");
+                        diaEstreno = scanner.nextInt();
+
+                        System.out.println("Ingrese la hora del estreno");
+                        horaEstreno= scanner.nextInt();
+
+                        System.out.println("Ingrese la minuto del estreno");
+                        minutoEstreno = scanner.nextInt();
+                        fechaEstreno = LocalDateTime.of(anoEstreno,mesEstreno,diaEstreno,horaEstreno,minutoEstreno);
+                    }
+                    Pelicula nuevaPelicula = new Pelicula(idPelicula, titulo, duracion, genero, clasificacion, sinopsis, autor, fechaEstreno);
                     cine.registrarPelicula(nuevaPelicula);
                     cine.agregarACartelera(nuevaPelicula);
 
@@ -232,65 +349,167 @@ public class Menu {
                     break;
                 case 5:
                     System.out.println("LISTAR CARTELERA");
-
-                    System.out.println("");
-
+                    cine.listarCartelera();
                     break;
                 case 6:
-                    scanner.nextLine();
                     System.out.println("AGREGAR COMIDA");
+                    scanner.nextLine(); // Limpiar el buffer
                     System.out.println("Ingrese el nombre de la nueva comida");
                     String nombreComida = scanner.nextLine();
+                    String id = comida.generarIdComida(nombreComida);
+
                     System.out.println("Ingrese la descripcion");
                     String descripcion = scanner.nextLine();
+
                     System.out.println("Ingrese la categoría de la comida");
                     String categoria = scanner.nextLine();
+
                     System.out.println("Ingrese el tamaño de la comida");
                     String tamano = scanner.nextLine();
-                    System.out.println("Ingrese el costo de la comida");
-                    String costo = scanner.nextLine();
-                    System.out.println("Ingrese el tipo de comida (Bebida o Alimento)");
-                    String tipo = scanner.nextLine();
-                    while (tipo != "Bebida" || tipo != "Alimento") {
-                        System.out.println("Ingrese un tipo de comida valido");
-                        System.out.println("Ingrese el tipo de comida (Bebida o Alimento)");
-                        tipo = scanner.nextLine();
-                    }
-                    if (tipo == "Bebida") {
-                        TipoComida BoA = TipoComida.BEBIDA;
-                    } else if (tipo == "Alimento") {
-                        TipoComida BoA = TipoComida.COMIDA;
 
+                    System.out.println("Ingrese el costo de la comida");
+                    double costo = scanner.nextDouble();
+
+                    TipoComida BoA = null;
+
+                    while (BoA == null) {
+                        System.out.println("Ingrese el tipo de comida (Bebida o Alimento)");
+                        String tipo = scanner.nextLine();
+
+                        if (tipo.equalsIgnoreCase("Bebida")) {
+                            BoA = TipoComida.BEBIDA;
+                        } else if (tipo.equalsIgnoreCase("Alimento")) {
+                            BoA = TipoComida.COMIDA;
+                        } else {
+                            System.out.println("Ingrese un tipo de comida valido (Bebida o Alimento)");
+                        }
                     }
-                    gestionComida.registrarComida(nombreComida,descripcion, categoria, tamano, costo, tipo );
+                    Comida comida = new Comida(id, nombreComida,descripcion,categoria,tamano,costo,BoA);
+                    // Registrar la comida usando gestionComida
+                    cine.registrarComida(comida);
                     break;
                 case 7:
-                    System.out.println("Hasta pronto.");
+                    scanner.nextLine();
+                    System.out.println("MODIFICAR COMIDA");
+                    System.out.println("Ingrese el nombre de la comida: ");
+                    String nombreComida1 = scanner.nextLine();
+                   cine.modificarComida(nombreComida1); // Implementar lógica para modificar comida
                     break;
+                case 8:
+                    System.out.println("LISTAR COMIDA");
+                    cine.listarComida();
+                    break;
+                case 9:
+                    System.out.println("CREAR SALA");
+                    String idSala = cine.generarIdSalas();
+                    Asientos [][] Asientos = new Asientos[12][10];
+                    String filas = "ABCDEFGHIJKL";
+                    int cantidadDeVip = 0;
+                    int cantidadDePremium = 0;
+                    System.out.println("El id de la sala es: "+ idSala);
+                    for (int i = 0; i < 12; i++) { // filas
+                        for (int j = 0; j < 10; j++) { // columnas
+                            char letraUno = filas.charAt(i);
+                            String numeroAsiento = letraUno + Integer.toString(j);
+
+                            Asientos asiento;
+                            if (i >= 0 && i <= 3) {
+                                asiento = new Asientos(numeroAsiento, CalidadAsiento.VIP);
+                                cantidadDeVip++;
+                            } else {
+                                asiento = new Asientos(numeroAsiento, CalidadAsiento.PREMIUM);
+                                cantidadDePremium++;
+                            }
+                            // Almacenar el asiento en la matriz
+                            Asientos[i][j] = asiento;
+                        }
+                    }
+                    scanner.nextLine();
+                    System.out.println("Ingrese el nombre de la pelicula: ");
+                    String nombrePeliculaAValidar = scanner.nextLine();
+
+                    while(!cine.validarNombrePelicula(nombrePeliculaAValidar)){
+                        System.out.println("Nombre no encontrado");
+                        System.out.println("Ingrese el nombre de la pelicula: ");
+                        nombrePeliculaAValidar = scanner.nextLine();
+                    }
+
+                    Salas salas = new Salas(idSala,cine.listaSalas.size() + 1,120,Asientos,cantidadDeVip,cantidadDePremium,nombrePeliculaAValidar);
+                    cine.registrarSalas(salas);
+
+                    break;
+
+                    case 10:
+                        System.out.println("LISTAR SALAS");
+                        cine.listarSalas();
+                        break;
+
+                    case 11:
+                            scanner.nextLine();
+                            System.out.println("CREAR PROYECCION");
+                            System.out.println("Ingrese el id de la sala: ");
+                            String idSala1 = scanner.nextLine();
+                            Salas salas1 = cine.obtenerSala(idSala1);
+
+                            while(!cine.validarSalas(idSala1)){
+                                System.out.println("Sala no encontrada");
+                                System.out.println("Ingrese el id de la sala: ");
+                                idSala1 = scanner.nextLine();
+                                salas1 = cine.obtenerSala(idSala1);
+                            }
+
+                            Pelicula pelicula1 = cine.obtenerPelicula(idSala1);
+
+                            LocalDateTime fechaActual = LocalDateTime.now();
+                            int anoActual = fechaActual.getYear();
+                            System.out.println("El mes de la proyeccion");
+                            int mesDeseado = scanner.nextInt();
+                            System.out.println("El dia de la proyeccion");
+                            int diaDeseado = scanner.nextInt();
+                            System.out.println("La hora de la proyeccion");
+                            int horaDeseado = scanner.nextInt();
+                            System.out.println("Los minutos de de la proyeccion");
+                            int minutosDeseados = scanner.nextInt();
+
+                            LocalDateTime fechaDeProyeccion = LocalDateTime.of(anoActual,mesDeseado,diaDeseado,horaDeseado,minutosDeseados);
+                            while (!cine.validarFechaValida(fechaDeProyeccion)){
+                                System.out.println("FECHA UBICADA EN  EL PASADO");
+                                anoActual = fechaActual.getYear();
+                                System.out.println("El mes de la proyeccion");
+                                mesDeseado = scanner.nextInt();
+                                System.out.println("El dia de la proyeccion");
+                                diaDeseado = scanner.nextInt();
+                                System.out.println("La hora de la proyeccion");
+                                horaDeseado = scanner.nextInt();
+                                System.out.println("Los minutos de de la proyeccion");
+                                minutosDeseados = scanner.nextInt();
+                                fechaDeProyeccion = LocalDateTime.of(anoActual,mesDeseado,diaDeseado,horaDeseado,minutosDeseados);
+                            }
+
+                            Proyeccion proyeccion = new Proyeccion(pelicula1, fechaDeProyeccion, salas1);
+                            cine.agregarProyeccion(proyeccion);
+
+                            System.out.println("Proyeccion agregada exitosamente");
+
+                            break;
+
+                    case 12:
+                                System.out.println("LISTAR PROYECCIONES");
+                                cine.mostrarProyecciones();
+                                break;
+                    case 13:
+
+                               System.out.println("LISTAR CLIENTES");
+                               cine.listarClientes();
+                               break;
+                    case 14:
+                              System.out.println("Saliendo del menu...");
+                              return;
                 default:
-                    System.out.println("Opción no válida.");
+                    System.out.println("Opción no válida. Por favor, elige nuevamente.");
             }
         }
     }
 
-
-    public static boolean validarFecha(int dia, int mes, int ano) {
-        try {
-            LocalDate fechaEstreno = LocalDate.of(ano, mes, dia);
-
-            LocalDate fechaActual = LocalDate.now();
-
-            if (fechaEstreno.isBefore(fechaActual)) {
-                System.out.println("La fecha de estreno no puede ser en el pasado.");
-                return false;
-            }
-
-            System.out.println("Fecha de Estreno válida: " + fechaEstreno);
-            return true;
-
-        } catch (DateTimeParseException | IllegalArgumentException e) {
-            System.out.println("Fecha inválida. Por favor, asegúrese de ingresar un día, mes y año correctos.");
-            return false;
-        }
-    }
 }
+

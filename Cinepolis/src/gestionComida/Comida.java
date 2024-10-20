@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Comida {
     //Comida
-    int idComida;
+    String idComida;
     String nombreComida; //palomitas, cheetos,etc
     String descripcionComida;
     String categoriaComida;
@@ -16,7 +16,7 @@ public class Comida {
     TipoComida tipoComida;
     LocalDateTime fecha = LocalDateTime.now();
     //constructor
-    public Comida(int idComida,
+    public Comida(String idComida,
                   String nombreComida,
                   String descripcionComida,
                   String categoriaComida,
@@ -30,8 +30,10 @@ public class Comida {
         this.precioComida = precio;
         this.tipoComida = tipoComida;
     }
+    public Comida() {
+    }
    //Getters
-    public int getIdComida() {
+    public String getIdComida() {
         return idComida;
     }
     public String getNombreComida() {
@@ -52,7 +54,7 @@ public class Comida {
     }
 
     //setters
-    public void setIdComida(int idComida) {
+    public void setIdComida(String idComida) {
         this.idComida = idComida;
     }
     public void setNombreComida(String nombreComida) {
@@ -72,18 +74,14 @@ public class Comida {
     }
 
     //metodos
-    public void mostrarInfoComida() {
-        System.out.println("Comida: " + getIdComida());
-        System.out.println("Nombre: " + getNombreComida());
-        System.out.println("Descripcion: " + getDescripcionComida());
-        System.out.println("Categoria: " + getCategoriaComida());
-        System.out.println("Tamano: " + getTamanoComida());
-        System.out.println("Precio: " + getPrecioComida());
+    public String mostrarInfoComida() {
+        String datos = String.format("Id: %s Nombre: %s Descripcion: %s, Categoria: %s, Tamano: %s Precio: %d", idComida,nombreComida,descripcionComida,categoriaComida,tamanoComida,precioComida);
+        return datos;
     }
     public String generarIdComida(String nombreComida) {
         char letraUno = nombreComida.charAt(0);
         int numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);
         int diaActual = fecha.getDayOfMonth();
-        return String.format("C-%c%c-%d%d", letraUno, numeroAleatorio, diaActual);
+        return String.format("C-%c%d-%d", letraUno, numeroAleatorio, diaActual);
     }
 }

@@ -9,41 +9,40 @@ import java.util.List;
 
 public class Salas {
 
-    ArrayList<Proyeccion> listaProyecciones= new ArrayList<>();
     String idSalas;
+    int numeroSala;
     int capacidadAsientos;
-    List<Asientos> listaAsientos = new ArrayList<Asientos>(); // ESTO ES UNA MATRIZ
-    Asientos tipoAsiento;
+    Asientos[][] matrizAsientos; // ESTO ES UNA MATRIZ
     LocalDate horaDeFuncion;
     int cantidadAsientosVIP;
     int cantidadAsientosPremium;
     String pelicula;
 
-    public Salas(String id, int capacidadAsientos, ArrayList listaAsientos, Asientos tipoAsiento, LocalDate horaDeFuncion, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
+
+    public Salas(String id,int numeroSala, int capacidadAsientos, Asientos [][] matrizAsientos, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
         this.idSalas = id;
         this.capacidadAsientos = capacidadAsientos;
-        this.listaAsientos = listaAsientos;
-        this.tipoAsiento = tipoAsiento;
-        this.horaDeFuncion = horaDeFuncion;
+        this.matrizAsientos = matrizAsientos;
         this.cantidadAsientosVIP = cantidadAsientosVIP;
         this.cantidadAsientosPremium = cantidadAsientosPremium;
         this.pelicula = pelicula;
-        this.listaProyecciones = new ArrayList<>();
+        this.numeroSala = numeroSala;
+
     }
 
     //Getters
     public String getIdSalas() {return idSalas;}
 
+    public int getNumeroSala() {
+        return numeroSala;
+    }
+
     public int getCapacidadAsientos() {
         return capacidadAsientos;
     }
 
-    public List<Asientos> getListaAsientos() {
-        return listaAsientos;
-    }
-
-    public Asientos getTipoAsiento() {
-        return tipoAsiento;
+    public Asientos[][] getmatrizAsientos() {
+        return matrizAsientos;
     }
 
     public LocalDate getHoraDeFuncion() {
@@ -58,11 +57,10 @@ public class Salas {
         return cantidadAsientosPremium;
     }
 
+
     public String getPelicula() {
         return pelicula;
     }
-
-    public ArrayList<Proyeccion> getProyecciones() {return listaProyecciones;}
 
 
     //Setters
@@ -70,16 +68,16 @@ public class Salas {
         this.idSalas = id;
     }
 
+    public void setIdSalas(String idSalas) {
+        this.idSalas = idSalas;
+    }
+
     public void setCapacidadAsientos(int capacidadAsientos) {
         this.capacidadAsientos = capacidadAsientos;
     }
 
-    public void setListaAsientos(List<Asientos> listaAsientos) {
-        this.listaAsientos = listaAsientos;
-    }
-
-    public void setTipoAsiento(Asientos tipoAsiento) {
-        this.tipoAsiento = tipoAsiento;
+    public void setMatrizAsientos(Asientos [][] matrizAsientos) {
+        this.matrizAsientos = matrizAsientos;
     }
 
     public void setHoraDeFuncion(LocalDate horaDeFuncion) {
@@ -98,12 +96,43 @@ public class Salas {
         this.pelicula = pelicula;
     }
 
-    public String mostrarDatosSalas(){
-        String datosSalas = String.format("ID: %s, Capacidad de asientos: %s, Lista Asientos: %s, Tipo de asiento: %s, Hora de función: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, capacidadAsientos, listaAsientos, tipoAsiento, horaDeFuncion,cantidadAsientosVIP,cantidadAsientosPremium );
+    public String mostrarDatosSala(){
+        String datosSalas = String.format("ID: %s  Numero de sala: %d, Capacidad de asientos: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, numeroSala, capacidadAsientos,cantidadAsientosVIP,cantidadAsientosPremium );
         return datosSalas;
     }
 
-    public void agregarProyeccion(Proyeccion proyeccion) {
-        listaProyecciones.add(proyeccion);
+    public void mostrarAsientos(){
+        String filas = "ABCDEFGHIJKL";
+        for (int i = 0; i < matrizAsientos.length; i++) {
+            char filaAsientos = filas.charAt(i);
+            for (int j = 0; j < matrizAsientos[i].length; j++) {
+                String vistaAsientos = String.format("%c%d", filaAsientos, j +1);
+                System.out.print(vistaAsientos +"  ");
+            }
+            System.out.println();
+        }
+    }
+
+    public boolean comprobarDisponibilidadAsiento(String asientoSeleccionado) {
+        String filas = "ABCDEFGHIJKL";
+        char fila = asientoSeleccionado.charAt(0);
+        int columna = Integer.parseInt(asientoSeleccionado.substring(1)) - 1;
+
+        int filaIndice = filas.indexOf(fila);
+
+        if (filaIndice >= 0 && columna >= 0 && columna < matrizAsientos[0].length) {
+            Asientos asiento = matrizAsientos[filaIndice][columna];
+            if (asiento.estaOcupado()) {
+                return false; // El asiento está ocupado
+            } else {
+                asiento.ocuparAsiento(); // Marcar asiento como ocupado
+                // Mostrar el tipo de asiento
+                System.out.println("Has seleccionado un asiento " + asiento.getTipoAsiento());
+                return true; // El asiento está disponible y se ocupa
+            }
+        } else {
+            System.out.println("El asiento seleccionado no es válido.");
+            return false;
+        }
     }
 }

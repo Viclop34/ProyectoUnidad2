@@ -6,6 +6,7 @@ import resources.Rol;
 public class Asientos {
     String numeroAsiesnto;
     CalidadAsiento tipoAsiento;
+    String status = "Desocupado";
 
     public Asientos(String numeroAsiesnto, CalidadAsiento tipoAsiento) {
         this.numeroAsiesnto = numeroAsiesnto;
@@ -33,4 +34,15 @@ public class Asientos {
     public void setTipoAsiento(CalidadAsiento tipoAsiento) {
         this.tipoAsiento = tipoAsiento;
     }
+
+    //Verifica asiento ocupado
+    public boolean estaOcupado() {
+        return status.equalsIgnoreCase("Ocupado");
+    }
+
+    //Marca asiento como ocupado
+    public void ocuparAsiento() {
+        this.status = "Ocupado";
+    }
+
 }

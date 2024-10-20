@@ -22,8 +22,6 @@ public class Usuarios {
         this.rol = rol;
     }
 
-    public void mostrarDatos(){
-    }
 
     // Getters
     public String getId() {
