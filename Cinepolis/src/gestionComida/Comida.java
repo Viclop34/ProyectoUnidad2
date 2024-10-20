@@ -2,7 +2,10 @@ package gestionComida;
 
 import resources.TipoComida;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Comida {
@@ -78,10 +81,23 @@ public class Comida {
         String datos = String.format("Id: %s    ,Nombre: %s,    Descripcion: %s,    Categoria: %s,  Tamano: %s,  Precio: %.2f", idComida,nombreComida,descripcionComida,categoriaComida,tamanoComida,precioComida);
         return datos;
     }
+    private Set<String> idsGeneradosComida = new HashSet<>();
+    private LocalDate fecha1 = LocalDate.now(); // Asumimos que esta fecha ya está inicializada
+
     public String generarIdComida(String nombreComida) {
         char letraUno = nombreComida.charAt(0);
         int numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);
         int diaActual = fecha.getDayOfMonth();
-        return String.format("C-%c%d-%d", letraUno, numeroAleatorio, diaActual);
+
+        String idComida = String.format("C-%c%d-%d", letraUno, numeroAleatorio, diaActual);
+
+        // Validar si el ID ya fue generado
+        while (idsGeneradosComida.contains(idComida)) {
+            numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);  // Generamos un nuevo número aleatorio
+            idComida = String.format("C-%c%d-%d", letraUno, numeroAleatorio, diaActual);
+        }
+
+        idsGeneradosComida.add(idComida);  // Guardamos el nuevo ID
+        return idComida;
     }
 }

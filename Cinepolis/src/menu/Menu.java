@@ -214,13 +214,13 @@ public class Menu {
                     }
                         System.out.println("Asiento reservado exitosamente.");
 
+
                         // Generar el ID del boleto y proceder a la impresión
                         String idBoleto = cine.generarIdBoleto(clienteEnSesion, nombrePeliculaDeseada, horarioSeleccionado, asientoSeleccionado);
                         Asientos asiento = salaSeleccionada.obtenerAsiento(asientoSeleccionado);
                         cine.crearBoleto(idBoleto,asiento,clienteEnSesion,salaSeleccionada);
 
                         System.out.println("Boleto generado exitosamente.");
-
                     break;
                 case 2:
                     System.out.println("VER PELICULAS DE CARTELERA");
@@ -228,6 +228,7 @@ public class Menu {
                     break;
                 case 3:
                     System.out.println("MIS RESERVAS");
+                    cine.obtenerBoletosCliente(clienteEnSesion.getNombre());
                     break;
                 case 4:
                     String opcionComida = "";
@@ -259,8 +260,9 @@ public class Menu {
                     }
 
                     System.out.println("El total de sus compras es:" + total);
+                    cine.metodoDePago(total);
 
-                    System.out.println("Recuerde que los productos estaran listos en dulceria y podra pagarlos al momento de su funcion.");
+                    System.out.println("Recuerde que los productos estaran listos en dulceria al momento de su función.");
                     break;
                 case 5:
                     System.out.println("Volviendo al menú principal...");

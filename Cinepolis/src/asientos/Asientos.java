@@ -1,8 +1,6 @@
 package asientos;
 
 import resources.CalidadAsiento;
-import resources.Rol;
-
 public class Asientos {
     String numeroAsiesnto;
     CalidadAsiento tipoAsiento;

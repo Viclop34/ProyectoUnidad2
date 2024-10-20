@@ -1,11 +1,7 @@
 package salas;
 
 import asientos.Asientos;
-import gestionPeliculas.Proyeccion;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Salas {
 

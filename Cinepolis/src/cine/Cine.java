@@ -13,10 +13,8 @@ import usuarios.cliente.Cliente;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.Random;
 
 public class Cine {
     public ArrayList<Cliente> listaClientes = new ArrayList<>();
@@ -52,6 +50,14 @@ public class Cine {
         }
     }
 
+    public void obtenerBoletosCliente(String nombreCliente){
+        for(Boletos boleto : this.listaBoletos){
+            if(boleto.getCliente().equals(nombreCliente)){
+                System.out.println(boleto.mostrarBoleto());
+            }
+        }
+    }
+
     // MÉTODOS RELACIONADOS CON CLIENTE
     public void registrarCliente(Cliente cliente) {
         listaClientes.add(cliente);
@@ -80,13 +86,23 @@ public class Cine {
         }
     }
 
-
+    private Set<String> idsGenerados = new HashSet<>();
     public String generarIdCliente(String nombreCliente, String apellidoCliente) {
         char letraUno = nombreCliente.charAt(0);
         char letraDos = apellidoCliente.charAt(apellidoCliente.length() - 1);
         int numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);
         int diaActual = fecha.getDayOfMonth();
-        return String.format("C-%c%c-%d%d", letraUno, letraDos, numeroAleatorio, diaActual);
+
+        String idCliente = String.format("C-%c%c-%d%d", letraUno, letraDos, numeroAleatorio, diaActual);
+
+        // Validar si el ID ya fue generado
+        while (idsGenerados.contains(idCliente)) {
+            numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);  // Generamos un nuevo número aleatorio
+            idCliente = String.format("C-%c%c-%d%d", letraUno, letraDos, numeroAleatorio, diaActual);
+        }
+
+        idsGenerados.add(idCliente);  // Guardamos el nuevo ID
+        return idCliente;
     }
 
     public boolean confirmarMesCumpleanos(Cliente cliente) {
@@ -99,27 +115,24 @@ public class Cine {
         return false;
     }
 
-    // MÉTODOS RELACIONADOS CON ASIENTOS
-
-
-    public boolean precioTipoAsiento(Asientos asiento) {
-        CalidadAsiento calidadValidar = asiento.getTipoAsiento();
-
-        if (calidadValidar == CalidadAsiento.PREMIUM) {
-            return true; // 200 Pesos
-        }
-        else {
-            return false; // 400 Pesos
-        }
-    }
-
     // MÉTODOS RELACIONADOS CON BOLETOS
+    private Set<String> idsGeneradosBoleto = new HashSet<>();
+
     public String generarIdBoleto(Cliente cliente, String nombrePelicula, String horario, String asiento) {
         String idCliente = cliente.getId();
         String inicialesPelicula = nombrePelicula.substring(0, 3).toUpperCase();
         String idAsiento = asiento.toUpperCase();
         String timestamp = String.valueOf(System.currentTimeMillis());
-        String idBoleto = String.format("%s-%s-%s-%s-%s", idCliente,horario, inicialesPelicula, idAsiento, timestamp);
+
+        String idBoleto = idCliente + inicialesPelicula + horario + idAsiento + timestamp;
+
+        // Validar si el ID ya fue generado
+        while (idsGeneradosBoleto.contains(idBoleto)) {
+            timestamp = String.valueOf(System.currentTimeMillis());  // Actualizamos el timestamp
+            idBoleto = idCliente + inicialesPelicula + horario + idAsiento + timestamp;
+        }
+
+        idsGeneradosBoleto.add(idBoleto);  // Guardamos el nuevo ID
         return idBoleto;
     }
 
@@ -160,6 +173,51 @@ public class Cine {
         Boletos boletos = new Boletos(idBoleto,salas.getIdSalas(),asientos.getNumeroAsiento(),cliente.getNombre(),salas.getPelicula(),costo,tipoAsiento,descuentoAplicado);
         registrarBoletos(boletos);
     }
+
+    public void metodoDePago(double costo) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Seleccione el método de pago: ");
+        System.out.println("1. Tarjeta de crédito");
+        System.out.println("2. Tarjeta de débito");
+        System.out.println("3. Efectivo");
+
+        int opcion = sc.nextInt();
+
+        switch (opcion) {
+            case 1:
+                System.out.println("Ingrese los detalles de su tarjeta de crédito:");
+                System.out.println("Procesando pago por tarjeta de crédito...");
+                if (validarPagoTarjeta(costo)) {
+                    System.out.println("Pago aprobado. Total: $" + costo);
+                } else {
+                    System.out.println("Pago rechazado. Intente nuevamente.");
+                }
+                break;
+            case 2:
+                System.out.println("Ingrese los detalles de su tarjeta de débito:");
+                System.out.println("Procesando pago por tarjeta de débito...");
+                if (validarPagoTarjeta(costo)) {
+                    System.out.println("Pago aprobado. Total: $" + costo);
+                } else {
+                    System.out.println("Pago rechazado. Intente nuevamente.");
+                }
+                break;
+            case 3:
+                System.out.println("Pago en efectivo seleccionado.");
+                System.out.println("Total a pagar: $" + costo);
+                System.out.println("Por favor, pague en la caja.");
+                break;
+            default:
+                System.out.println("Opción no válida. Intente de nuevo.");
+        }
+    }
+
+    private boolean validarPagoTarjeta(double monto) {
+        return true;
+    }
+
+
 
 
     public boolean validacionCurp(String curp) {
@@ -232,13 +290,25 @@ public class Cine {
     }
 
 
+    private Set<String> idsGeneradosPelicula = new HashSet<>();
+
     public String generarIdPelicula(String titulo, String autor) {
         char letraUno = titulo.charAt(0);
         char letraDos = autor.charAt(autor.length() - 1);
         int numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);
         LocalDate fecha = LocalDate.now();
         int diaActual = fecha.getDayOfMonth();
-        return String.format("P-%c%c-%d%d", letraUno, letraDos, numeroAleatorio, diaActual);
+
+        String idPelicula = String.format("P-%c%c-%d%d", letraUno, letraDos, numeroAleatorio, diaActual);
+
+        // Validar si el ID ya fue generado
+        while (idsGeneradosPelicula.contains(idPelicula)) {
+            numeroAleatorio = ThreadLocalRandom.current().nextInt(1, 3000);  // Generamos un nuevo número aleatorio
+            idPelicula = String.format("P-%c%c-%d%d", letraUno, letraDos, numeroAleatorio, diaActual);
+        }
+
+        idsGeneradosPelicula.add(idPelicula);  // Guardamos el nuevo ID
+        return idPelicula;
     }
 
 
@@ -468,10 +538,21 @@ public class Cine {
             System.out.println(proyeccion.mostrarDatos());
         }
     }
+    private Set<String> idsGeneradosSalas = new HashSet<>();
+
     public String generarIdSalas() {
         int diaActual = LocalDate.now().getDayOfMonth();
         int numeroAleatorio = new Random().nextInt(100000 - 50) + 50;
-        return String.format("CO-%d-%d-%d", listaSalas.size() + 1, numeroAleatorio, diaActual);
+        String idSala = String.format("CO-%d-%d-%d", idsGeneradosSalas.size() + 1, numeroAleatorio, diaActual);
+
+        // Validar si el ID ya fue generado
+        while (idsGeneradosSalas.contains(idSala)) {
+            numeroAleatorio = new Random().nextInt(100000 - 50) + 50;  // Generamos un nuevo número aleatorio
+            idSala = String.format("CO-%d-%d-%d", idsGeneradosSalas.size() + 1, numeroAleatorio, diaActual);
+        }
+
+        idsGeneradosSalas.add(idSala);  // Guardamos el nuevo ID
+        return idSala;
     }
     public void registrarSalas(Salas salas) {
         listaSalas.add(salas);
@@ -525,15 +606,6 @@ public class Cine {
     public Salas obtenerSala(String idSala) {
         for (Salas salas : listaSalas) {
             if(salas.getIdSalas().equals(idSala)) {
-                return salas;
-            }
-        }
-        return null;
-    }
-
-    public Salas obtenerSalaPorNumero(int sala) {
-        for (Salas salas : listaSalas) {
-            if(salas.getNumeroSala() == sala) {
                 return salas;
             }
         }
