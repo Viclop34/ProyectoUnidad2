@@ -262,7 +262,7 @@ public class Menu {
                         TipoComida BoA = TipoComida.COMIDA;
 
                     }
-                    gestionComida.registrarComida(nombreComida,descripcion, categoria, tamano, costo, BoA );
+                    gestionComida.registrarComida(nombreComida,descripcion, categoria, tamano, costo, tipo );
                     break;
                 case 7:
                     System.out.println("Hasta pronto.");
