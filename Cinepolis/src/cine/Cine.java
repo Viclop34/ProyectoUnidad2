@@ -371,7 +371,7 @@ public class Cine {
         }
         return true;
     }
-
+//METODOS COMIDA
     public void registrarComida(Comida comida) {
         listaComida.add(comida);
     }
@@ -428,6 +428,14 @@ public class Cine {
         for (Comida comida: listaComida){
             System.out.println(comida.mostrarInfoComida());
         }
+    }
+
+    public Comida obtenerComida(String nombreComida){
+        for(Comida comida : listaComida) {
+           if(comida.getNombreComida().equals(nombreComida)){
+               return comida;
+           }
+        } return null;
     }
 
     public void agregarProyeccion(Proyeccion proyeccion) {

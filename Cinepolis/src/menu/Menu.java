@@ -232,7 +232,13 @@ public class Menu {
                     }
                     break;
                 case 4:
-
+                    System.out.println(" MENÚ: ");
+                    System.out.println(" \n Que alimentos desea comprar");
+                    System.out.println(cine.listaComida);
+                    String nombreComida = scanner.nextLine();
+                    cine.obtenerComida(nombreComida);
+                    System.out.println("Comida pendiente por recoger: " + nombreComida);
+                    System.out.println("Recuerde que los productos estaran listos en dulceria y podra pagarlos al momento de su funcion.");
                     break;
                 case 5:
                     System.out.println("Volviendo al menú principal...");
