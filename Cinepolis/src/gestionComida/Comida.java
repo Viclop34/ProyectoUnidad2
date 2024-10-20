@@ -75,7 +75,7 @@ public class Comida {
 
     //metodos
     public String mostrarInfoComida() {
-        String datos = String.format("Id: %s Nombre: %s Descripcion: %s, Categoria: %s, Tamano: %s Precio: %d", idComida,nombreComida,descripcionComida,categoriaComida,tamanoComida,precioComida);
+        String datos = String.format("Id: %s    ,Nombre: %s,    Descripcion: %s,    Categoria: %s,  Tamano: %s,  Precio: %.2f", idComida,nombreComida,descripcionComida,categoriaComida,tamanoComida,precioComida);
         return datos;
     }
     public String generarIdComida(String nombreComida) {

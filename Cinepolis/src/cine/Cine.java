@@ -28,7 +28,7 @@ public class Cine {
     public ArrayList<Comida> listaComida = new ArrayList<>();
     ArrayList<Proyeccion> listaProyecciones= new ArrayList<>();
     public ArrayList<Salas> listaSalas= new ArrayList<>();
-
+    public ArrayList<Boletos> listaBoletos= new ArrayList<>();
 
     Random random = new Random();
     LocalDateTime fecha = LocalDateTime.now();
@@ -40,6 +40,16 @@ public class Cine {
             }
         }
         return null;
+    }
+
+    public void registrarBoletos (Boletos boleto) {
+        listaBoletos.add(boleto);
+    }
+
+    public void listarBoletos (){
+        for (Boletos boleto : listaBoletos) {
+            System.out.println(boleto.mostrarBoleto());
+        }
     }
 
     // MÉTODOS RELACIONADOS CON CLIENTE
@@ -109,11 +119,11 @@ public class Cine {
         String inicialesPelicula = nombrePelicula.substring(0, 3).toUpperCase();
         String idAsiento = asiento.toUpperCase();
         String timestamp = String.valueOf(System.currentTimeMillis());
-
-        return idCliente + "" + inicialesPelicula + "" + horario + "" + idAsiento + "" + timestamp;
+        String idBoleto = String.format("%s-%s-%s-%s-%s", idCliente,horario, inicialesPelicula, idAsiento, timestamp);
+        return idBoleto;
     }
 
-    public void imprimirBoleto(String idBoleto, Asientos asientos, Cliente cliente, Salas salas) {
+    public void crearBoleto(String idBoleto, Asientos asientos, Cliente cliente, Salas salas) {
         double costo = 0;
         boolean descuentoAplicado = false;
 
@@ -125,20 +135,30 @@ public class Cine {
                 costo = 400 * (1 - 0.35); // Precio original menos el 35%
                 descuentoAplicado = true;
             }
+        } else {
+            if (asientos.getTipoAsiento() == CalidadAsiento.PREMIUM) {
+                costo = 200; // Precio original menos el 60%
+            } else if (asientos.getTipoAsiento() == CalidadAsiento.VIP) {
+                costo = 400;
+            }
         }
+
         // Si no se aplicó descuento
-        if (!descuentoAplicado) {
-            costo = precioTipoAsiento(asientos) ? 200 : 400; // costo sin descuento
-        }
 
-        String asiento = asientos.getNumeroAsiento();
-        String nombreCliente = cliente.getNombre();
         String tipoAsiento = asientos.getTipoAsiento().toString();
-        String pelicula = salas.getPelicula();
-        String idSala = salas.getIdSalas();
+        System.out.println("Id del boleto: " + idBoleto);
+        System.out.println("Cliente: " + cliente.getNombre());
+        System.out.println("Asiento: " + asientos.getNumeroAsiento());
+        System.out.println("Tipo de Asiento: " + tipoAsiento);
+        System.out.println("Pelicula: " + salas.getPelicula());
+        System.out.println("Sala: " + salas.getNumeroSala());
+        System.out.println("TOTAL: " + costo);
 
-        System.out.printf("Boleto: %s\nCliente: %s\nAsiento: %s\nTipo Asiento: %s\nPelicula: %s\nSala: %s\nCosto: %.2f\n",
-                idBoleto, nombreCliente, asiento, tipoAsiento, pelicula, idSala, costo);
+        if (descuentoAplicado) {
+            System.out.println("Que tenga un feliz mes de cumpleaños");
+        }
+        Boletos boletos = new Boletos(idBoleto,salas.getIdSalas(),asientos.getNumeroAsiento(),cliente.getNombre(),salas.getPelicula(),costo,tipoAsiento,descuentoAplicado);
+        registrarBoletos(boletos);
     }
 
 
@@ -467,6 +487,15 @@ public class Cine {
     public boolean validarNombrePelicula(String nombrePelicula) {
         for(Pelicula pelicula : listaPeliculas) {
             if(pelicula.getTitulo().equals(nombrePelicula)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean validarNombreComida(String nombreComida) {
+        for(Comida comida : listaComida) {
+            if(comida.getNombreComida().equals(nombreComida)) {
                 return true;
             }
         }

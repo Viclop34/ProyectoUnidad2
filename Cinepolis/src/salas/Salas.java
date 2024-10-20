@@ -19,7 +19,7 @@ public class Salas {
     String pelicula;
 
 
-    public Salas(String id,int numeroSala, int capacidadAsientos, Asientos [][] matrizAsientos, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
+    public Salas(String id, int numeroSala, int capacidadAsientos, Asientos[][] matrizAsientos, int cantidadAsientosVIP, int cantidadAsientosPremium, String pelicula) {
         this.idSalas = id;
         this.capacidadAsientos = capacidadAsientos;
         this.matrizAsientos = matrizAsientos;
@@ -31,7 +31,9 @@ public class Salas {
     }
 
     //Getters
-    public String getIdSalas() {return idSalas;}
+    public String getIdSalas() {
+        return idSalas;
+    }
 
     public int getNumeroSala() {
         return numeroSala;
@@ -76,7 +78,7 @@ public class Salas {
         this.capacidadAsientos = capacidadAsientos;
     }
 
-    public void setMatrizAsientos(Asientos [][] matrizAsientos) {
+    public void setMatrizAsientos(Asientos[][] matrizAsientos) {
         this.matrizAsientos = matrizAsientos;
     }
 
@@ -96,18 +98,18 @@ public class Salas {
         this.pelicula = pelicula;
     }
 
-    public String mostrarDatosSala(){
-        String datosSalas = String.format("ID: %s  Numero de sala: %d, Capacidad de asientos: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, numeroSala, capacidadAsientos,cantidadAsientosVIP,cantidadAsientosPremium );
+    public String mostrarDatosSala() {
+        String datosSalas = String.format("ID: %s  Numero de sala: %d, Capacidad de asientos: %s, Cantidad Asientos VIP: %d, Cantidad Asientos Premium: %d", idSalas, numeroSala, capacidadAsientos, cantidadAsientosVIP, cantidadAsientosPremium);
         return datosSalas;
     }
 
-    public void mostrarAsientos(){
+    public void mostrarAsientos() {
         String filas = "ABCDEFGHIJKL";
         for (int i = 0; i < matrizAsientos.length; i++) {
             char filaAsientos = filas.charAt(i);
             for (int j = 0; j < matrizAsientos[i].length; j++) {
-                String vistaAsientos = String.format("%c%d", filaAsientos, j +1);
-                System.out.print(vistaAsientos +"  ");
+                String vistaAsientos = String.format("%c%d", filaAsientos, j + 1);
+                System.out.print(vistaAsientos + "  ");
             }
             System.out.println();
         }
@@ -134,5 +136,16 @@ public class Salas {
             System.out.println("El asiento seleccionado no es válido.");
             return false;
         }
+    }
+
+    public Asientos obtenerAsiento(String asientoSeleccionado) {
+        for (int i = 0; i < matrizAsientos.length; i++) {
+            for (int j = 0; j < matrizAsientos[i].length; j++) {
+                if (matrizAsientos[i][j].getNumeroAsiento().equals(asientoSeleccionado)) {
+                    return matrizAsientos[i][j];
+                }
+            }
+        }
+        return null;
     }
 }

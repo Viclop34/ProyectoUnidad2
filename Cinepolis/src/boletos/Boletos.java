@@ -1,21 +1,15 @@
 package boletos;
-
-import gestionPeliculas.Proyeccion;
-import peliculas.Pelicula;
-import salas.Salas;
-import usuarios.cliente.Cliente;
-
 public class Boletos {
 String idBoleto;
 String sala;
 String asiento;
 String cliente;
 String pelicula;
-String precio;
+double precio;
 String tipoAsiento;
 Boolean tieneDescuento;
 
-    public Boletos(String idBoleto, String sala, String asiento, String cliente, String pelicula, String precio, String tipoAsiento, Boolean tieneDescuento) {
+    public Boletos(String idBoleto, String sala, String asiento, String cliente, String pelicula, double precio, String tipoAsiento, Boolean tieneDescuento) {
         this.idBoleto = idBoleto;
         this.sala = sala;
         this.asiento = asiento;
@@ -49,7 +43,7 @@ Boolean tieneDescuento;
         return pelicula;
     }
 
-    public String getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
@@ -61,9 +55,17 @@ Boolean tieneDescuento;
         return tieneDescuento;
     }
 
-   /* public void generarIdBoleto(Proyeccion proyeccion, Cliente cliente) {
-        String nombre = cliente.getNombre();
-        Salas numeroDeSala = proyeccion.getSala();
-        Pelicula nombrePelicula = proyeccion.getPelicula();
-    }*/
+    public String mostrarBoleto() {
+        if (!tieneDescuento) {
+            String datosBoletos = String.format("Id del boleto: %s,     Sala: %s,   Asiento: %s,    Cliente: %s,    " +
+                            "Pelicula: %s,   Precio: %f.2    Tipo de Asiento: %s", idBoleto, sala, asiento,
+                    cliente, pelicula, precio, tipoAsiento);
+            return datosBoletos;
+        }
+        String datosBoletos = String.format("Id del boleto: %s,     Sala: %s,   Asiento: %s,    Cliente: %s," +
+                "    Pelicula: %s,   Precio: %f.2    Tipo de Asiento: %s TIENE DESCUENTO", idBoleto,sala,asiento,
+                cliente,pelicula,precio,tipoAsiento);
+        return datosBoletos;
+    }
+
 }

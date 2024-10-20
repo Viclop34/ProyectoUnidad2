@@ -11,7 +11,6 @@ import resources.CalidadAsiento;
 import resources.Rol;
 import resources.TipoComida;
 import salas.Salas;
-import salas.gestionSalas.GestionSalas;
 import usuarios.Usuarios;
 import usuarios.admin.Admin;
 import usuarios.cliente.Cliente;
@@ -25,7 +24,6 @@ public class Menu {
     private Scanner scanner = new Scanner(System.in);
     private Cine cine = new Cine();
     private Pelicula pelicula;
-    private GestionSalas gestionSalas;
     private Salas salas;
     private Boletos boletos;
     private Asientos asientos;
@@ -208,17 +206,21 @@ public class Menu {
                     String asientoSeleccionado = scanner.nextLine();
 
                     boolean asientoDisponible = salaSeleccionada.comprobarDisponibilidadAsiento(asientoSeleccionado);
-                    if (asientoDisponible) {
+
+                    while (!asientoDisponible){
+                        System.out.println("El asiento ya está ocupado o no existe. Por favor selecciona otro.");
+                        asientoSeleccionado = scanner.nextLine();
+                        asientoDisponible = salaSeleccionada.comprobarDisponibilidadAsiento(asientoSeleccionado);
+                    }
                         System.out.println("Asiento reservado exitosamente.");
 
                         // Generar el ID del boleto y proceder a la impresión
                         String idBoleto = cine.generarIdBoleto(clienteEnSesion, nombrePeliculaDeseada, horarioSeleccionado, asientoSeleccionado);
-                        System.out.println("ID de Boleto generado: " + idBoleto);
+                        Asientos asiento = salaSeleccionada.obtenerAsiento(asientoSeleccionado);
+                        cine.crearBoleto(idBoleto,asiento,clienteEnSesion,salaSeleccionada);
 
                         System.out.println("Boleto generado exitosamente.");
-                    } else {
-                        System.out.println("El asiento ya está ocupado o no existe. Por favor selecciona otro.");
-                    }
+
                     break;
                 case 2:
                     System.out.println("VER PELICULAS DE CARTELERA");
@@ -226,18 +228,38 @@ public class Menu {
                     break;
                 case 3:
                     System.out.println("MIS RESERVAS");
-                    ArrayList<Boletos> misBoletos = clienteEnSesion.getBoletosReservados();
-                    for (Boletos boleto : misBoletos) {
-                        System.out.println("Boleto ID: " + boleto.getIdBoleto() + ", Película: " + boleto.getPelicula() + ", Asiento: " + boleto.getAsiento());
-                    }
                     break;
                 case 4:
+                    String opcionComida = "";
+                    ArrayList<Double> totalDeCompras = new ArrayList<>();
                     System.out.println(" MENÚ: ");
-                    System.out.println(" \n Que alimentos desea comprar");
-                    System.out.println(cine.listaComida);
-                    String nombreComida = scanner.nextLine();
-                    cine.obtenerComida(nombreComida);
-                    System.out.println("Comida pendiente por recoger: " + nombreComida);
+                    System.out.println("Ingrese el nombre de la comida que desea comprar:");
+                    cine.listarComida();
+                    System.out.println("Escriba SALIR para terminar sus compras");
+
+                    while (!opcionComida.equals("SALIR")) {
+                        opcionComida = scanner.nextLine();
+
+                        if (cine.validarNombreComida(opcionComida)) {
+                            Comida comida = cine.obtenerComida(opcionComida);
+                            Double precio = comida.getPrecioComida();
+                            totalDeCompras.add(precio);
+                            System.out.println("Comida agregada exitosamente.");
+                        }
+                    }
+
+                    if (totalDeCompras.isEmpty()) {
+                        System.out.println("No se agregó comida");
+                        break;
+                    }
+                    Double total = 0.0;
+                    for (int i = 0; i < totalDeCompras.size(); i++) {
+                        Double precio = totalDeCompras.get(i);
+                        total += precio;
+                    }
+
+                    System.out.println("El total de sus compras es:" + total);
+
                     System.out.println("Recuerde que los productos estaran listos en dulceria y podra pagarlos al momento de su funcion.");
                     break;
                 case 5:
@@ -251,7 +273,7 @@ public class Menu {
 
     private void mostrarMenuAdmin(Admin administradorEnSesion) {
         int opcion = 0;
-        while (opcion != 14) { // Cambié el límite a 9 para coincidir con las opciones
+        while (opcion != 15) { // Cambié el límite a 9 para coincidir con las opciones
             System.out.println("\n*BIENVENIDO*");
             System.out.println("1. Registrar película");
             System.out.println("2. Modificar película");
@@ -266,7 +288,8 @@ public class Menu {
             System.out.println("11. Crear Proyeccion");
             System.out.println("12. Listar Proyecciones");
             System.out.println("13. Listar clientes");
-            System.out.println("14. Salir");
+            System.out.println("14. Listar boletos");
+            System.out.println("15. Salir");
 
             System.out.print("\nSeleccione una opción:\n");
             opcion = scanner.nextInt();
@@ -509,8 +532,12 @@ public class Menu {
                                cine.listarClientes();
                                break;
                     case 14:
-                              System.out.println("Saliendo del menu...");
-                              return;
+                             System.out.println("LISTAR BOLETOS");
+                             cine.listarBoletos();
+                              break;
+                              case 15:
+                                  System.out.println("Saliendo del menu...");
+                                  return;
                 default:
                     System.out.println("Opción no válida. Por favor, elige nuevamente.");
             }
