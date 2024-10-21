@@ -38,23 +38,6 @@ public class Menu {
     public void login() {
         int intentosMaximos = 5;
         int intentosUsuario = 0;
-    // PELICULA PRUEBA
-        String cIdPelicula = cine.generarIdPelicula("Locas", "Pablo");
-        LocalDateTime cFechaEstreno = LocalDateTime.of(2025,7,20,5,10);
-
-        Pelicula cNuevaPelicula = new Pelicula(cIdPelicula, "Locas", 120, "Accion", "13"
-                , "fdsuhfksdhfsdjk", "Pablo", cFechaEstreno);
-        cine.registrarPelicula(cNuevaPelicula);
-        cine.agregarACartelera(cNuevaPelicula);
-    //
-
-        // CLIENTE PRUEBA
-        String cId = cine.generarIdCliente("Victor", "Lopez");
-        LocalDate cFechaNacimiento = LocalDate.of(2000, 4, 1);
-        Cliente cCliente = new Cliente(cId, "Victor", "Lopez", cFechaNacimiento, "cliente", "RACW050729MMCSHNA2", "kfdsjflksjf");
-        cCliente.setId("vic123");
-        cine.registrarCliente(cCliente);
-        //
         //
         while (intentosUsuario < intentosMaximos) {
             scanner.nextLine();
